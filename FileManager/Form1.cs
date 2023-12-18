@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace FileManager
 {
@@ -21,7 +27,6 @@ namespace FileManager
 
     public partial class Form1 : Form
     {
-        private const string separator = "  |";
         private string currentPath1 = "";
         private DirectoryInfo currentDirectory1 = null;
 
@@ -29,23 +34,46 @@ namespace FileManager
         private DirectoryInfo currentDirectory2 = null;
 
         private Task currentTaskLeft;
-        CancellationTokenSource cancelTokenSourceLeft;
+        private CancellationTokenSource cancelTokenSourceLeft;
 
         private Task currentTaskRight;
-        CancellationTokenSource cancelTokenSourceRight;
+        private CancellationTokenSource cancelTokenSourceRight;
+
+        private TableLayoutSettings tableLayoutSettingsLeft;
+        private TableLayoutSettings tableLayoutSettingsRight;
+
+        private List<string> extensionsList1;
+        private List<string> extensionsList2;
 
         public Form1()
         {
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            clearStatusStrip(Side.Left);
+            clearStatusStrip(Side.Right);
 
-        private void openFolder(string path, Side side)
+            tableLayoutSettingsLeft = (TableLayoutSettings)statusStrip1.LayoutSettings;
+            tableLayoutSettingsRight = (TableLayoutSettings)statusStrip2.LayoutSettings;
+
+            extensionsList1 = new List<string>();
+            extensionsList2 = new List<string>();
+
+            openFolder(@"D:\", Side.Left);
+            openFolder(@"D:\", Side.Right);
+        }
+
+
+        private void openFolder(string path, Side side, bool isRefresh = false)
         {
             try
             {
-
                 DirectoryInfo info = new DirectoryInfo(path);
+                DirectoryInfo[] dir = info.GetDirectories();
+                clearStatusStrip(side);
+                if (!isRefresh) clearExtensions(side);
 
                 if (!info.Exists) throw new ArgumentNullException("info");
 
@@ -65,7 +93,7 @@ namespace FileManager
                     currentDirectory2 = info;
                 }
 
-                DirectoryInfo[] dir = info.GetDirectories();
+                comparePaths();
 
                 if (info.Parent != null && info.Parent.Name != "")
                 {
@@ -77,6 +105,7 @@ namespace FileManager
 
                     if (side == Side.Left) listView1.Items.Add(listViewItem);
                     if (side == Side.Right) listView2.Items.Add(listViewItem);
+
                 }
 
                 foreach (DirectoryInfo item in dir)
@@ -88,8 +117,31 @@ namespace FileManager
                     listViewItem.SubItems.Add(item.CreationTime.ToString()); // Дата создания
                     listViewItem.SubItems.Add(item.LastWriteTime.ToString()); // Дата изменения
 
-                    if (side == Side.Left) listView1.Items.Add(listViewItem);
-                    if (side == Side.Right) listView2.Items.Add(listViewItem);
+                    if (item.Attributes.HasFlag(FileAttributes.Hidden)) listViewItem.ForeColor = Color.Gray; // Скрытый
+                    if (item.Attributes.HasFlag(FileAttributes.System)) listViewItem.ForeColor = Color.Blue; // Системный
+
+                    if (side == Side.Left)
+                    {
+                        if (!extensionsList1.Contains("Папка"))
+                            extensionsList1.Add("Папка");
+
+                        if ((string)comboBox1_ext.SelectedItem == null || (string)comboBox1_ext.SelectedItem == "–" || (string)comboBox1_ext.SelectedItem == "Папка")
+                        {
+                            listView1.Items.Add(listViewItem);
+                        }
+                    }
+
+                    if (side == Side.Right)
+                    {
+                        if (!extensionsList2.Contains("Папка"))
+                            extensionsList2.Add("Папка");
+
+
+                        if ((string)comboBox2_ext.SelectedItem == null || (string)comboBox2_ext.SelectedItem == "–" || (string)comboBox2_ext.SelectedItem == "Папка")
+                        {
+                            listView2.Items.Add(listViewItem);
+                        }
+                    }
                 }
 
                 FileInfo[] files = info.GetFiles();
@@ -103,10 +155,32 @@ namespace FileManager
                     listViewItem.SubItems.Add(item.CreationTime.ToString()); // Дата создания
                     listViewItem.SubItems.Add(item.LastWriteTime.ToString()); // Дата изменения
 
-                    if (side == Side.Left) listView1.Items.Add(listViewItem);
-                    if (side == Side.Right) listView2.Items.Add(listViewItem);
+                    if (item.Attributes.HasFlag(FileAttributes.Hidden)) listViewItem.ForeColor = Color.Gray; // Скрытый
+                    if (item.Attributes.HasFlag(FileAttributes.System)) listViewItem.ForeColor = Color.Blue; // Системный
+
+                    if (side == Side.Left)
+                    {
+                        if (!extensionsList1.Contains(item.Extension))
+                            extensionsList1.Add(item.Extension);
+
+                        if ((string)comboBox1_ext.SelectedItem == null || (string)comboBox1_ext.SelectedItem == "–" || (string)comboBox1_ext.SelectedItem == item.Extension)
+                        {
+                            listView1.Items.Add(listViewItem);
+                        }
+                    }
+                    if (side == Side.Right)
+                    {
+                        if (!extensionsList2.Contains(item.Extension))
+                            extensionsList2.Add(item.Extension);
+
+                        if ((string)comboBox2_ext.SelectedItem == null || (string)comboBox2_ext.SelectedItem == "–" || (string)comboBox2_ext.SelectedItem == item.Extension)
+                        {
+                            listView2.Items.Add(listViewItem);
+                        }
+                    }
                 }
 
+                if (!isRefresh) fillComboBox(side);
             }
             catch (UnauthorizedAccessException e)
             {
@@ -149,6 +223,86 @@ namespace FileManager
             }
         }
 
+
+        private void clearStatusStrip(Side side)
+        {
+            if (side == Side.Left)
+            {
+                toolStripStatusLabel1_name.Text = "Имя: –";
+                toolStripStatusLabel1_type.Text = "Тип: –";
+                toolStripStatusLabel1_size.Text = "Размер: –";
+                toolStripStatusLabel1_dateCreated.Text = "Создан: –";
+                toolStripStatusLabel1_dateChanged.Text = "Изменён: –";
+                toolStripStatusLabel1_attr.Text = "Атрибуты: –";
+            }
+
+            if (side == Side.Right)
+            {
+                toolStripStatusLabel2_name.Text = "Имя: –";
+                toolStripStatusLabel2_type.Text = "Тип: –";
+                toolStripStatusLabel2_size.Text = "Размер: –";
+                toolStripStatusLabel2_dateCreated.Text = "Создан: –";
+                toolStripStatusLabel2_dateChanged.Text = "Изменён: –";
+                toolStripStatusLabel2_attr.Text = "Атрибуты: –";
+            }
+        }
+
+        private void comparePaths()
+        {
+            if (currentPath1 == currentPath2)
+            {
+                button1_moveToRight.Enabled = false;
+                button1_copyToRight.Enabled = false;
+                button2_moveToLeft.Enabled = false;
+                button2_copyToLeft.Enabled = false;
+            }
+            else
+            {
+                button1_moveToRight.Enabled = true;
+                button1_copyToRight.Enabled = true;
+                button2_moveToLeft.Enabled = true;
+                button2_copyToLeft.Enabled = true;
+            }
+        }
+
+        private void clearExtensions(Side side)
+        {
+            if (side == Side.Left)
+            {
+                extensionsList1.Clear();
+            }
+
+            if (side == Side.Right)
+            {
+                extensionsList2.Clear();
+            }
+        }
+
+        private void fillComboBox(Side side)
+        {
+            if (side == Side.Left)
+            {
+                comboBox1_ext.Items.Clear();
+                comboBox1_ext.Items.Add("–");
+                foreach (var item in extensionsList1)
+                {
+                    comboBox1_ext.Items.Add(item);
+                }
+                comboBox1_ext.SelectedIndex = 0;
+            }
+
+            if (side == Side.Right)
+            {
+                comboBox2_ext.Items.Clear();
+                comboBox2_ext.Items.Add("–");
+                foreach (var item in extensionsList2)
+                {
+                    comboBox2_ext.Items.Add(item);
+                }
+                comboBox2_ext.SelectedIndex = 0;
+            }
+        }
+
         private void selectionChangeHandlerLeft(ListViewItemWithData item)
         {
             if (currentTaskLeft != null)
@@ -172,23 +326,22 @@ namespace FileManager
 
             if (item == null || item.Type == ListItemType.None)
             {
-                toolStripStatusLabel1_name.Text = "Имя: –" + separator;
-                toolStripStatusLabel1_type.Text = "Тип: –" + separator;
-                toolStripStatusLabel1_size.Text = "Размер: –" + separator;
-                toolStripStatusLabel1_dateCreated.Text = "Создан: –" + separator;
-                toolStripStatusLabel1_dateChanged.Text = "Изменён: –" + separator;
+                clearStatusStrip(Side.Left);
+                button1_delete.Enabled = false;
 
                 return;
             }
+            button1_delete.Enabled = true;
 
             if (item.Type == ListItemType.Folder)
             {
                 DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
-                toolStripStatusLabel1_name.Text = "Имя: " + directoryInfo.Name + separator;
-                toolStripStatusLabel1_type.Text = "Тип: " + "Папка" + separator;
-                toolStripStatusLabel1_size.Text = "Размер: " + "загрузка..." + separator;
-                toolStripStatusLabel1_dateCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString() + separator;
-                toolStripStatusLabel1_dateChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString() + separator;
+                toolStripStatusLabel1_name.Text = "Имя: " + directoryInfo.Name;
+                toolStripStatusLabel1_type.Text = "Тип: " + "Папка";
+                toolStripStatusLabel1_size.Text = "Размер: " + "загрузка...";
+                toolStripStatusLabel1_dateCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString();
+                toolStripStatusLabel1_dateChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString();
+                toolStripStatusLabel1_attr.Text = "Атрибуты: " + directoryInfo.Attributes.ToString();
 
                 cancelTokenSourceLeft = new CancellationTokenSource();
                 currentTaskLeft = Task.Run(() =>
@@ -196,7 +349,7 @@ namespace FileManager
                     if (cancelTokenSourceLeft.Token.IsCancellationRequested)
                         cancelTokenSourceLeft.Token.ThrowIfCancellationRequested(); // генерируем исключение
 
-                    toolStripStatusLabel1_size.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSourceLeft.Token)) + separator;
+                    toolStripStatusLabel1_size.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSourceLeft.Token));
                 }, cancelTokenSourceLeft.Token);
             }
 
@@ -204,11 +357,12 @@ namespace FileManager
             {
                 FileInfo fileInfo = (FileInfo)item.GetData();
 
-                toolStripStatusLabel1_name.Text = "Имя: " + fileInfo.Name + separator;
-                toolStripStatusLabel1_type.Text = "Тип: " + fileInfo.Extension + separator;
-                toolStripStatusLabel1_size.Text = "Размер: " + Helpers.ToFileSize(fileInfo.Length) + separator;
-                toolStripStatusLabel1_dateCreated.Text = "Создан: " + fileInfo.CreationTime.ToString() + separator;
-                toolStripStatusLabel1_dateChanged.Text = "Изменён: " + fileInfo.LastWriteTime.ToString() + separator;
+                toolStripStatusLabel1_name.Text = "Имя: " + fileInfo.Name;
+                toolStripStatusLabel1_type.Text = "Тип: " + fileInfo.Extension;
+                toolStripStatusLabel1_size.Text = "Размер: " + Helpers.ToFileSize(fileInfo.Length);
+                toolStripStatusLabel1_dateCreated.Text = "Создан: " + fileInfo.CreationTime.ToString();
+                toolStripStatusLabel1_dateChanged.Text = "Изменён: " + fileInfo.LastWriteTime.ToString();
+                toolStripStatusLabel1_attr.Text = "Атрибуты: " + fileInfo.Attributes.ToString();
             }
         }
 
@@ -235,23 +389,23 @@ namespace FileManager
 
             if (item == null || item.Type == ListItemType.None)
             {
-                toolStripStatusLabel2_name.Text = "Имя: – |";
-                toolStripStatusLabel2_type.Text = "Тип: – |";
-                toolStripStatusLabel2_size.Text = "Размер: – |";
-                toolStripStatusLabel2_dateCreated.Text = "Создан: – |";
-                toolStripStatusLabel2_dateChanged.Text = "Изменён: – |";
+                clearStatusStrip(Side.Right);
+                button2_delete.Enabled = false;
 
                 return;
             }
+            button2_delete.Enabled = true;
 
             if (item.Type == ListItemType.Folder)
             {
                 DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
-                toolStripStatusLabel2_name.Text = "Имя: " + directoryInfo.Name + separator;
-                toolStripStatusLabel2_type.Text = "Тип: " + "Папка" + separator;
-                toolStripStatusLabel2_size.Text = "Размер: " + "загрузка..." + separator;
-                toolStripStatusLabel2_dateCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString() + separator;
-                toolStripStatusLabel2_dateChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString() + separator;
+                toolStripStatusLabel2_name.Text = "Имя: " + directoryInfo.Name;
+                toolStripStatusLabel2_type.Text = "Тип: " + "Папка";
+                toolStripStatusLabel2_size.Text = "Размер: " + "загрузка...";
+                toolStripStatusLabel2_dateCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString();
+                toolStripStatusLabel2_dateChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString();
+                toolStripStatusLabel2_attr.Text = "Атрибуты: " + directoryInfo.Attributes.ToString();
+
 
                 cancelTokenSourceRight = new CancellationTokenSource();
                 currentTaskRight = Task.Run(() =>
@@ -259,7 +413,7 @@ namespace FileManager
                     if (cancelTokenSourceRight.Token.IsCancellationRequested)
                         cancelTokenSourceRight.Token.ThrowIfCancellationRequested(); // генерируем исключение
 
-                    toolStripStatusLabel2_size.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSourceRight.Token)) + separator;
+                    toolStripStatusLabel2_size.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSourceRight.Token));
                 }, cancelTokenSourceRight.Token);
             }
 
@@ -267,30 +421,13 @@ namespace FileManager
             {
                 FileInfo fileInfo = (FileInfo)item.GetData();
 
-                toolStripStatusLabel2_name.Text = "Имя: " + fileInfo.Name + separator;
-                toolStripStatusLabel2_type.Text = "Тип: " + fileInfo.Extension + separator;
-                toolStripStatusLabel2_size.Text = "Размер: " + Helpers.ToFileSize(fileInfo.Length) + separator;
-                toolStripStatusLabel2_dateCreated.Text = "Создан: " + fileInfo.CreationTime.ToString() + separator;
-                toolStripStatusLabel2_dateChanged.Text = "Изменён: " + fileInfo.LastWriteTime.ToString() + separator;
+                toolStripStatusLabel2_name.Text = "Имя: " + fileInfo.Name;
+                toolStripStatusLabel2_type.Text = "Тип: " + fileInfo.Extension;
+                toolStripStatusLabel2_size.Text = "Размер: " + Helpers.ToFileSize(fileInfo.Length);
+                toolStripStatusLabel2_dateCreated.Text = "Создан: " + fileInfo.CreationTime.ToString();
+                toolStripStatusLabel2_dateChanged.Text = "Изменён: " + fileInfo.LastWriteTime.ToString();
+                toolStripStatusLabel2_attr.Text = "Атрибуты: " + fileInfo.Attributes.ToString();
             }
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            openFolder(@"D:\", Side.Left);
-            openFolder(@"D:\", Side.Right);
-
-            toolStripStatusLabel1_name.Text = "Имя: –" + separator;
-            toolStripStatusLabel1_type.Text = "Тип: –" + separator;
-            toolStripStatusLabel1_size.Text = "Размер: –" + separator;
-            toolStripStatusLabel1_dateCreated.Text = "Создан: –" + separator;
-            toolStripStatusLabel1_dateChanged.Text = "Изменён: –" + separator;
-
-            toolStripStatusLabel2_name.Text = "Имя: –" + separator;
-            toolStripStatusLabel2_type.Text = "Тип: –" + separator;
-            toolStripStatusLabel2_size.Text = "Размер: –" + separator;
-            toolStripStatusLabel2_dateCreated.Text = "Создан: –" + separator;
-            toolStripStatusLabel2_dateChanged.Text = "Изменён: –" + separator;
         }
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -329,7 +466,8 @@ namespace FileManager
         {
             try
             {
-                openFolder(path1_TextBox.Text, Side.Left);
+                if (path1_TextBox.Text != currentPath1)
+                    openFolder(path1_TextBox.Text, Side.Left);
             }
             catch
             {
@@ -343,6 +481,7 @@ namespace FileManager
             if (e.KeyData == Keys.Enter)
             {
                 splitContainer2.ActiveControl = null;
+                e.Handled = true;
             }
         }
 
@@ -350,7 +489,8 @@ namespace FileManager
         {
             try
             {
-                openFolder(path2_TextBox.Text, Side.Right);
+                if (path2_TextBox.Text != currentPath2)
+                    openFolder(path2_TextBox.Text, Side.Right);
             }
             catch
             {
@@ -364,7 +504,70 @@ namespace FileManager
             if (e.KeyData == Keys.Enter)
             {
                 splitContainer3.ActiveControl = null;
+                e.Handled = true;
             }
+        }
+
+        private void path1_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            int selection = textbox.SelectionStart;
+            textbox.Text = textbox.Text.Replace("/", @"\");
+            textbox.SelectionStart = selection;
+            textbox.SelectionLength = 0;
+        }
+
+        private void path2_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            int selection = textbox.SelectionStart;
+            textbox.Text = textbox.Text.Replace("/", @"\");
+            textbox.SelectionStart = selection;
+            textbox.SelectionLength = 0;
+        }
+
+        private void statusStrip1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            StatusStrip statusStrip = sender as StatusStrip;
+
+            statusStrip.ResumeLayout(false);
+            if (statusStrip.LayoutStyle == ToolStripLayoutStyle.Table)
+            {
+                statusStrip.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
+            }
+            else if (statusStrip.LayoutStyle == ToolStripLayoutStyle.VerticalStackWithOverflow)
+            {
+                statusStrip.LayoutSettings = tableLayoutSettingsLeft;
+                statusStrip.LayoutStyle = ToolStripLayoutStyle.Table;
+            }
+            statusStrip.PerformLayout();
+        }
+
+        private void statusStrip2_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            StatusStrip statusStrip = sender as StatusStrip;
+
+            statusStrip.ResumeLayout(false);
+            if (statusStrip.LayoutStyle == ToolStripLayoutStyle.Table)
+            {
+                statusStrip.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
+            }
+            else if (statusStrip.LayoutStyle == ToolStripLayoutStyle.VerticalStackWithOverflow)
+            {
+                statusStrip.LayoutSettings = tableLayoutSettingsRight;
+                statusStrip.LayoutStyle = ToolStripLayoutStyle.Table;
+            }
+            statusStrip.PerformLayout();
+        }
+
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            openFolder(currentPath1, Side.Left, true);
+        }
+
+        private void comboBox2_ext_SelectedValueChanged(object sender, EventArgs e)
+        {
+            openFolder(currentPath2, Side.Right, true);
         }
     }
 }
