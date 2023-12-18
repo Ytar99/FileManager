@@ -37,12 +37,12 @@
             this.button1_moveToRight = new System.Windows.Forms.Button();
             this.comboBox1_ext = new System.Windows.Forms.ComboBox();
             this.button1_copyToRight = new System.Windows.Forms.Button();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker1_from = new System.Windows.Forms.DateTimePicker();
             this.button1_delete = new System.Windows.Forms.Button();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker1_to = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.search1_TextBox = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -55,6 +55,7 @@
             this.toolStripStatusLabel1_size = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1_dateCreated = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1_dateChanged = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1_attr = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.path2_TextBox = new System.Windows.Forms.TextBox();
@@ -63,12 +64,12 @@
             this.button2_moveToLeft = new System.Windows.Forms.Button();
             this.comboBox2_ext = new System.Windows.Forms.ComboBox();
             this.button2_copyToLeft = new System.Windows.Forms.Button();
-            this.dateTimePicker3 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker2_from = new System.Windows.Forms.DateTimePicker();
             this.button2_delete = new System.Windows.Forms.Button();
-            this.dateTimePicker4 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker2_to = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.search2_TextBox = new System.Windows.Forms.TextBox();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -81,7 +82,6 @@
             this.toolStripStatusLabel2_size = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_dateCreated = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_dateChanged = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1_attr = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_attr = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -118,8 +118,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer1.Panel2.Controls.Add(this.statusStrip2);
-            this.splitContainer1.Size = new System.Drawing.Size(784, 610);
-            this.splitContainer1.SplitterDistance = 390;
+            this.splitContainer1.Size = new System.Drawing.Size(800, 610);
+            this.splitContainer1.SplitterDistance = 397;
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
             // 
@@ -139,7 +139,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.listView1);
-            this.splitContainer2.Size = new System.Drawing.Size(386, 582);
+            this.splitContainer2.Size = new System.Drawing.Size(393, 582);
             this.splitContainer2.SplitterDistance = 184;
             this.splitContainer2.TabIndex = 1;
             this.splitContainer2.TabStop = false;
@@ -152,16 +152,16 @@
             this.groupBox1.Controls.Add(this.button1_moveToRight);
             this.groupBox1.Controls.Add(this.comboBox1_ext);
             this.groupBox1.Controls.Add(this.button1_copyToRight);
-            this.groupBox1.Controls.Add(this.dateTimePicker1);
+            this.groupBox1.Controls.Add(this.dateTimePicker1_from);
             this.groupBox1.Controls.Add(this.button1_delete);
-            this.groupBox1.Controls.Add(this.dateTimePicker2);
+            this.groupBox1.Controls.Add(this.dateTimePicker1_to);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.search1_TextBox);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(386, 184);
+            this.groupBox1.Size = new System.Drawing.Size(393, 184);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Первая директория";
@@ -172,16 +172,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.path1_TextBox.Location = new System.Drawing.Point(9, 16);
             this.path1_TextBox.Name = "path1_TextBox";
-            this.path1_TextBox.Size = new System.Drawing.Size(371, 20);
+            this.path1_TextBox.Size = new System.Drawing.Size(378, 20);
             this.path1_TextBox.TabIndex = 1;
-            this.path1_TextBox.TextChanged += new System.EventHandler(this.path1_TextBox_TextChanged);
-            this.path1_TextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.path1_TextBox_KeyUp);
-            this.path1_TextBox.Leave += new System.EventHandler(this.path1_TextBox_Leave);
             // 
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(275, 147);
+            this.button4.Location = new System.Drawing.Point(282, 147);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(105, 23);
             this.button4.TabIndex = 6;
@@ -200,7 +197,7 @@
             // button1_moveToRight
             // 
             this.button1_moveToRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_moveToRight.Location = new System.Drawing.Point(275, 76);
+            this.button1_moveToRight.Location = new System.Drawing.Point(282, 76);
             this.button1_moveToRight.Name = "button1_moveToRight";
             this.button1_moveToRight.Size = new System.Drawing.Size(105, 23);
             this.button1_moveToRight.TabIndex = 9;
@@ -215,41 +212,40 @@
             this.comboBox1_ext.Name = "comboBox1_ext";
             this.comboBox1_ext.Size = new System.Drawing.Size(144, 21);
             this.comboBox1_ext.TabIndex = 2;
-            this.comboBox1_ext.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
             // button1_copyToRight
             // 
             this.button1_copyToRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_copyToRight.Location = new System.Drawing.Point(275, 102);
+            this.button1_copyToRight.Location = new System.Drawing.Point(282, 102);
             this.button1_copyToRight.Name = "button1_copyToRight";
             this.button1_copyToRight.Size = new System.Drawing.Size(105, 23);
             this.button1_copyToRight.TabIndex = 10;
             this.button1_copyToRight.Text = "Скопировать ->";
             this.button1_copyToRight.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker1
+            // dateTimePicker1_from
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(9, 105);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(120, 20);
-            this.dateTimePicker1.TabIndex = 3;
+            this.dateTimePicker1_from.Location = new System.Drawing.Point(9, 105);
+            this.dateTimePicker1_from.Name = "dateTimePicker1_from";
+            this.dateTimePicker1_from.Size = new System.Drawing.Size(120, 20);
+            this.dateTimePicker1_from.TabIndex = 3;
             // 
             // button1_delete
             // 
             this.button1_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_delete.Location = new System.Drawing.Point(275, 44);
+            this.button1_delete.Location = new System.Drawing.Point(282, 44);
             this.button1_delete.Name = "button1_delete";
             this.button1_delete.Size = new System.Drawing.Size(105, 23);
             this.button1_delete.TabIndex = 8;
             this.button1_delete.Text = "Удалить";
             this.button1_delete.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker2
+            // dateTimePicker1_to
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(135, 105);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(120, 20);
-            this.dateTimePicker2.TabIndex = 4;
+            this.dateTimePicker1_to.Location = new System.Drawing.Point(135, 105);
+            this.dateTimePicker1_to.Name = "dateTimePicker1_to";
+            this.dateTimePicker1_to.Size = new System.Drawing.Size(120, 20);
+            this.dateTimePicker1_to.TabIndex = 4;
             // 
             // label3
             // 
@@ -269,14 +265,14 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Фильтр по датам";
             // 
-            // textBox1
+            // search1_TextBox
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.search1_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(9, 150);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(260, 20);
-            this.textBox1.TabIndex = 5;
+            this.search1_TextBox.Location = new System.Drawing.Point(9, 150);
+            this.search1_TextBox.Name = "search1_TextBox";
+            this.search1_TextBox.Size = new System.Drawing.Size(267, 20);
+            this.search1_TextBox.TabIndex = 5;
             // 
             // listView1
             // 
@@ -292,12 +288,10 @@
             this.listView1.LabelWrap = false;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(386, 394);
+            this.listView1.Size = new System.Drawing.Size(393, 394);
             this.listView1.TabIndex = 7;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView1_ItemSelectionChanged);
-            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
             // 
             // columnHeader1
             // 
@@ -335,11 +329,10 @@
             this.toolStripStatusLabel1_attr});
             this.statusStrip1.Location = new System.Drawing.Point(0, 582);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(386, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(393, 24);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "Item info";
-            this.statusStrip1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.statusStrip1_MouseDoubleClick);
             // 
             // toolStripStatusLabel1_name
             // 
@@ -381,6 +374,14 @@
             this.toolStripStatusLabel1_dateChanged.Text = "Изменён: –";
             this.toolStripStatusLabel1_dateChanged.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // toolStripStatusLabel1_attr
+            // 
+            this.toolStripStatusLabel1_attr.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.toolStripStatusLabel1_attr.Name = "toolStripStatusLabel1_attr";
+            this.toolStripStatusLabel1_attr.Size = new System.Drawing.Size(77, 19);
+            this.toolStripStatusLabel1_attr.Text = "Атрибуты: –";
+            this.toolStripStatusLabel1_attr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // splitContainer3
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -397,7 +398,7 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.listView2);
-            this.splitContainer3.Size = new System.Drawing.Size(386, 582);
+            this.splitContainer3.Size = new System.Drawing.Size(395, 582);
             this.splitContainer3.SplitterDistance = 184;
             this.splitContainer3.TabIndex = 2;
             this.splitContainer3.TabStop = false;
@@ -410,16 +411,16 @@
             this.groupBox2.Controls.Add(this.button2_moveToLeft);
             this.groupBox2.Controls.Add(this.comboBox2_ext);
             this.groupBox2.Controls.Add(this.button2_copyToLeft);
-            this.groupBox2.Controls.Add(this.dateTimePicker3);
+            this.groupBox2.Controls.Add(this.dateTimePicker2_from);
             this.groupBox2.Controls.Add(this.button2_delete);
-            this.groupBox2.Controls.Add(this.dateTimePicker4);
+            this.groupBox2.Controls.Add(this.dateTimePicker2_to);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.textBox2);
+            this.groupBox2.Controls.Add(this.search2_TextBox);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(386, 184);
+            this.groupBox2.Size = new System.Drawing.Size(395, 184);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Вторая директория";
@@ -430,16 +431,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.path2_TextBox.Location = new System.Drawing.Point(6, 16);
             this.path2_TextBox.Name = "path2_TextBox";
-            this.path2_TextBox.Size = new System.Drawing.Size(374, 20);
+            this.path2_TextBox.Size = new System.Drawing.Size(383, 20);
             this.path2_TextBox.TabIndex = 11;
-            this.path2_TextBox.TextChanged += new System.EventHandler(this.path2_TextBox_TextChanged);
-            this.path2_TextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.path2_TextBox_KeyUp);
-            this.path2_TextBox.Leave += new System.EventHandler(this.path2_TextBox_Leave);
             // 
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(275, 147);
+            this.button5.Location = new System.Drawing.Point(284, 147);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(105, 23);
             this.button5.TabIndex = 16;
@@ -458,7 +456,7 @@
             // button2_moveToLeft
             // 
             this.button2_moveToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_moveToLeft.Location = new System.Drawing.Point(275, 76);
+            this.button2_moveToLeft.Location = new System.Drawing.Point(284, 76);
             this.button2_moveToLeft.Name = "button2_moveToLeft";
             this.button2_moveToLeft.Size = new System.Drawing.Size(105, 23);
             this.button2_moveToLeft.TabIndex = 19;
@@ -473,41 +471,40 @@
             this.comboBox2_ext.Name = "comboBox2_ext";
             this.comboBox2_ext.Size = new System.Drawing.Size(144, 21);
             this.comboBox2_ext.TabIndex = 12;
-            this.comboBox2_ext.SelectedValueChanged += new System.EventHandler(this.comboBox2_ext_SelectedValueChanged);
             // 
             // button2_copyToLeft
             // 
             this.button2_copyToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_copyToLeft.Location = new System.Drawing.Point(275, 102);
+            this.button2_copyToLeft.Location = new System.Drawing.Point(284, 102);
             this.button2_copyToLeft.Name = "button2_copyToLeft";
             this.button2_copyToLeft.Size = new System.Drawing.Size(105, 23);
             this.button2_copyToLeft.TabIndex = 20;
             this.button2_copyToLeft.Text = "<- Скопировать";
             this.button2_copyToLeft.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker3
+            // dateTimePicker2_from
             // 
-            this.dateTimePicker3.Location = new System.Drawing.Point(6, 105);
-            this.dateTimePicker3.Name = "dateTimePicker3";
-            this.dateTimePicker3.Size = new System.Drawing.Size(120, 20);
-            this.dateTimePicker3.TabIndex = 13;
+            this.dateTimePicker2_from.Location = new System.Drawing.Point(6, 105);
+            this.dateTimePicker2_from.Name = "dateTimePicker2_from";
+            this.dateTimePicker2_from.Size = new System.Drawing.Size(120, 20);
+            this.dateTimePicker2_from.TabIndex = 13;
             // 
             // button2_delete
             // 
             this.button2_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_delete.Location = new System.Drawing.Point(275, 44);
+            this.button2_delete.Location = new System.Drawing.Point(284, 44);
             this.button2_delete.Name = "button2_delete";
             this.button2_delete.Size = new System.Drawing.Size(105, 23);
             this.button2_delete.TabIndex = 18;
             this.button2_delete.Text = "Удалить";
             this.button2_delete.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker4
+            // dateTimePicker2_to
             // 
-            this.dateTimePicker4.Location = new System.Drawing.Point(132, 105);
-            this.dateTimePicker4.Name = "dateTimePicker4";
-            this.dateTimePicker4.Size = new System.Drawing.Size(120, 20);
-            this.dateTimePicker4.TabIndex = 14;
+            this.dateTimePicker2_to.Location = new System.Drawing.Point(132, 105);
+            this.dateTimePicker2_to.Name = "dateTimePicker2_to";
+            this.dateTimePicker2_to.Size = new System.Drawing.Size(120, 20);
+            this.dateTimePicker2_to.TabIndex = 14;
             // 
             // label5
             // 
@@ -527,14 +524,14 @@
             this.label6.TabIndex = 6;
             this.label6.Text = "Фильтр по датам";
             // 
-            // textBox2
+            // search2_TextBox
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.search2_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(6, 150);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(263, 20);
-            this.textBox2.TabIndex = 15;
+            this.search2_TextBox.Location = new System.Drawing.Point(6, 150);
+            this.search2_TextBox.Name = "search2_TextBox";
+            this.search2_TextBox.Size = new System.Drawing.Size(272, 20);
+            this.search2_TextBox.TabIndex = 15;
             // 
             // listView2
             // 
@@ -549,12 +546,10 @@
             this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(386, 394);
+            this.listView2.Size = new System.Drawing.Size(395, 394);
             this.listView2.TabIndex = 17;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
-            this.listView2.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView2_ItemSelectionChanged);
-            this.listView2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseDoubleClick);
             // 
             // columnHeader6
             // 
@@ -592,11 +587,10 @@
             this.toolStripStatusLabel2_attr});
             this.statusStrip2.Location = new System.Drawing.Point(0, 582);
             this.statusStrip2.Name = "statusStrip2";
-            this.statusStrip2.Size = new System.Drawing.Size(386, 24);
+            this.statusStrip2.Size = new System.Drawing.Size(395, 24);
             this.statusStrip2.SizingGrip = false;
             this.statusStrip2.TabIndex = 1;
             this.statusStrip2.Text = "Item info";
-            this.statusStrip2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.statusStrip2_MouseDoubleClick);
             // 
             // toolStripStatusLabel2_name
             // 
@@ -638,14 +632,6 @@
             this.toolStripStatusLabel2_dateChanged.Text = "Изменён: –";
             this.toolStripStatusLabel2_dateChanged.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // toolStripStatusLabel1_attr
-            // 
-            this.toolStripStatusLabel1_attr.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
-            this.toolStripStatusLabel1_attr.Name = "toolStripStatusLabel1_attr";
-            this.toolStripStatusLabel1_attr.Size = new System.Drawing.Size(77, 19);
-            this.toolStripStatusLabel1_attr.Text = "Атрибуты: –";
-            this.toolStripStatusLabel1_attr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // toolStripStatusLabel2_attr
             // 
             this.toolStripStatusLabel2_attr.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
@@ -658,7 +644,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 610);
+            this.ClientSize = new System.Drawing.Size(800, 610);
             this.Controls.Add(this.splitContainer1);
             this.MinimumSize = new System.Drawing.Size(800, 480);
             this.Name = "Form1";
@@ -706,11 +692,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1_to;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1_from;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox search1_TextBox;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button1_moveToRight;
         private System.Windows.Forms.Button button1_copyToRight;
@@ -733,12 +719,12 @@
         private System.Windows.Forms.Button button2_moveToLeft;
         private System.Windows.Forms.ComboBox comboBox2_ext;
         private System.Windows.Forms.Button button2_copyToLeft;
-        private System.Windows.Forms.DateTimePicker dateTimePicker3;
+        private System.Windows.Forms.DateTimePicker dateTimePicker2_from;
         private System.Windows.Forms.Button button2_delete;
-        private System.Windows.Forms.DateTimePicker dateTimePicker4;
+        private System.Windows.Forms.DateTimePicker dateTimePicker2_to;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox search2_TextBox;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.TextBox path1_TextBox;
