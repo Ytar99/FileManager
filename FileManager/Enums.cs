@@ -15,6 +15,7 @@ namespace FileManager
     public enum ListItemType
     {
         None,
+        Backward,
         File,
         Folder,
     }

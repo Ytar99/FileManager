@@ -41,7 +41,6 @@
             this.button1_delete = new System.Windows.Forms.Button();
             this.dateTimePicker1_to = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.search1_TextBox = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -68,7 +67,6 @@
             this.button2_delete = new System.Windows.Forms.Button();
             this.dateTimePicker2_to = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.search2_TextBox = new System.Windows.Forms.TextBox();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -83,6 +81,10 @@
             this.toolStripStatusLabel2_dateCreated = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_dateChanged = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_attr = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button1_create = new System.Windows.Forms.Button();
+            this.button2_create = new System.Windows.Forms.Button();
+            this.checkBox1_dateFilterCheck = new System.Windows.Forms.CheckBox();
+            this.checkBox2_dateFilterCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -146,6 +148,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox1_dateFilterCheck);
+            this.groupBox1.Controls.Add(this.button1_create);
             this.groupBox1.Controls.Add(this.path1_TextBox);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.label1);
@@ -156,7 +160,6 @@
             this.groupBox1.Controls.Add(this.button1_delete);
             this.groupBox1.Controls.Add(this.dateTimePicker1_to);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.search1_TextBox);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
@@ -177,10 +180,9 @@
             // 
             // button4
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(282, 147);
+            this.button4.Location = new System.Drawing.Point(191, 148);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(105, 23);
+            this.button4.Size = new System.Drawing.Size(64, 23);
             this.button4.TabIndex = 6;
             this.button4.Text = "Поиск";
             this.button4.UseVisualStyleBackColor = true;
@@ -197,7 +199,7 @@
             // button1_moveToRight
             // 
             this.button1_moveToRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_moveToRight.Location = new System.Drawing.Point(282, 76);
+            this.button1_moveToRight.Location = new System.Drawing.Point(285, 44);
             this.button1_moveToRight.Name = "button1_moveToRight";
             this.button1_moveToRight.Size = new System.Drawing.Size(105, 23);
             this.button1_moveToRight.TabIndex = 9;
@@ -216,7 +218,7 @@
             // button1_copyToRight
             // 
             this.button1_copyToRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_copyToRight.Location = new System.Drawing.Point(282, 102);
+            this.button1_copyToRight.Location = new System.Drawing.Point(285, 68);
             this.button1_copyToRight.Name = "button1_copyToRight";
             this.button1_copyToRight.Size = new System.Drawing.Size(105, 23);
             this.button1_copyToRight.TabIndex = 10;
@@ -233,7 +235,7 @@
             // button1_delete
             // 
             this.button1_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_delete.Location = new System.Drawing.Point(282, 44);
+            this.button1_delete.Location = new System.Drawing.Point(285, 92);
             this.button1_delete.Name = "button1_delete";
             this.button1_delete.Size = new System.Drawing.Size(105, 23);
             this.button1_delete.TabIndex = 8;
@@ -256,22 +258,11 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Найти по ключевому слову";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 86);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(96, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Фильтр по датам";
-            // 
             // search1_TextBox
             // 
-            this.search1_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.search1_TextBox.Location = new System.Drawing.Point(9, 150);
             this.search1_TextBox.Name = "search1_TextBox";
-            this.search1_TextBox.Size = new System.Drawing.Size(267, 20);
+            this.search1_TextBox.Size = new System.Drawing.Size(176, 20);
             this.search1_TextBox.TabIndex = 5;
             // 
             // listView1
@@ -405,6 +396,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBox2_dateFilterCheck);
+            this.groupBox2.Controls.Add(this.button2_create);
             this.groupBox2.Controls.Add(this.path2_TextBox);
             this.groupBox2.Controls.Add(this.button5);
             this.groupBox2.Controls.Add(this.label4);
@@ -415,7 +408,6 @@
             this.groupBox2.Controls.Add(this.button2_delete);
             this.groupBox2.Controls.Add(this.dateTimePicker2_to);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.search2_TextBox);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
@@ -436,10 +428,9 @@
             // 
             // button5
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(284, 147);
+            this.button5.Location = new System.Drawing.Point(188, 148);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(105, 23);
+            this.button5.Size = new System.Drawing.Size(64, 23);
             this.button5.TabIndex = 16;
             this.button5.Text = "Поиск";
             this.button5.UseVisualStyleBackColor = true;
@@ -456,7 +447,7 @@
             // button2_moveToLeft
             // 
             this.button2_moveToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_moveToLeft.Location = new System.Drawing.Point(284, 76);
+            this.button2_moveToLeft.Location = new System.Drawing.Point(284, 44);
             this.button2_moveToLeft.Name = "button2_moveToLeft";
             this.button2_moveToLeft.Size = new System.Drawing.Size(105, 23);
             this.button2_moveToLeft.TabIndex = 19;
@@ -475,7 +466,7 @@
             // button2_copyToLeft
             // 
             this.button2_copyToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_copyToLeft.Location = new System.Drawing.Point(284, 102);
+            this.button2_copyToLeft.Location = new System.Drawing.Point(284, 68);
             this.button2_copyToLeft.Name = "button2_copyToLeft";
             this.button2_copyToLeft.Size = new System.Drawing.Size(105, 23);
             this.button2_copyToLeft.TabIndex = 20;
@@ -492,7 +483,7 @@
             // button2_delete
             // 
             this.button2_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_delete.Location = new System.Drawing.Point(284, 44);
+            this.button2_delete.Location = new System.Drawing.Point(284, 92);
             this.button2_delete.Name = "button2_delete";
             this.button2_delete.Size = new System.Drawing.Size(105, 23);
             this.button2_delete.TabIndex = 18;
@@ -515,22 +506,11 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Найти по ключевому слову";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 86);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(96, 13);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "Фильтр по датам";
-            // 
             // search2_TextBox
             // 
-            this.search2_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.search2_TextBox.Location = new System.Drawing.Point(6, 150);
             this.search2_TextBox.Name = "search2_TextBox";
-            this.search2_TextBox.Size = new System.Drawing.Size(272, 20);
+            this.search2_TextBox.Size = new System.Drawing.Size(176, 20);
             this.search2_TextBox.TabIndex = 15;
             // 
             // listView2
@@ -640,6 +620,46 @@
             this.toolStripStatusLabel2_attr.Text = "Атрибуты: –";
             this.toolStripStatusLabel2_attr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // button1_create
+            // 
+            this.button1_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1_create.Location = new System.Drawing.Point(285, 116);
+            this.button1_create.Name = "button1_create";
+            this.button1_create.Size = new System.Drawing.Size(105, 23);
+            this.button1_create.TabIndex = 11;
+            this.button1_create.Text = "Создать";
+            this.button1_create.UseVisualStyleBackColor = true;
+            // 
+            // button2_create
+            // 
+            this.button2_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2_create.Location = new System.Drawing.Point(284, 116);
+            this.button2_create.Name = "button2_create";
+            this.button2_create.Size = new System.Drawing.Size(105, 23);
+            this.button2_create.TabIndex = 21;
+            this.button2_create.Text = "Создать";
+            this.button2_create.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1_dateFilterCheck
+            // 
+            this.checkBox1_dateFilterCheck.AutoSize = true;
+            this.checkBox1_dateFilterCheck.Location = new System.Drawing.Point(9, 87);
+            this.checkBox1_dateFilterCheck.Name = "checkBox1_dateFilterCheck";
+            this.checkBox1_dateFilterCheck.Size = new System.Drawing.Size(115, 17);
+            this.checkBox1_dateFilterCheck.TabIndex = 12;
+            this.checkBox1_dateFilterCheck.Text = "Фильтр по датам";
+            this.checkBox1_dateFilterCheck.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2_dateFilterCheck
+            // 
+            this.checkBox2_dateFilterCheck.AutoSize = true;
+            this.checkBox2_dateFilterCheck.Location = new System.Drawing.Point(6, 87);
+            this.checkBox2_dateFilterCheck.Name = "checkBox2_dateFilterCheck";
+            this.checkBox2_dateFilterCheck.Size = new System.Drawing.Size(115, 17);
+            this.checkBox2_dateFilterCheck.TabIndex = 22;
+            this.checkBox2_dateFilterCheck.Text = "Фильтр по датам";
+            this.checkBox2_dateFilterCheck.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -694,7 +714,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.DateTimePicker dateTimePicker1_to;
         private System.Windows.Forms.DateTimePicker dateTimePicker1_from;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox search1_TextBox;
         private System.Windows.Forms.Button button4;
@@ -723,7 +742,6 @@
         private System.Windows.Forms.Button button2_delete;
         private System.Windows.Forms.DateTimePicker dateTimePicker2_to;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox search2_TextBox;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
@@ -733,6 +751,10 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_type;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1_attr;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_attr;
+        private System.Windows.Forms.Button button1_create;
+        private System.Windows.Forms.Button button2_create;
+        private System.Windows.Forms.CheckBox checkBox1_dateFilterCheck;
+        private System.Windows.Forms.CheckBox checkBox2_dateFilterCheck;
     }
 }
 

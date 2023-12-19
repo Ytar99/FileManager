@@ -33,7 +33,8 @@ namespace FileManager
                 search1_TextBox, 
                 button1_delete, 
                 button1_moveToRight, 
-                button1_copyToRight, 
+                button1_copyToRight,
+                button1_create,
                 listView1, 
                 statusStrip1
                 );
@@ -48,6 +49,7 @@ namespace FileManager
                 button2_delete,
                 button2_moveToLeft,
                 button2_copyToLeft,
+                button2_create,
                 listView2,
                 statusStrip2
                 );

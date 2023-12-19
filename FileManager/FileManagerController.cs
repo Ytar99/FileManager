@@ -20,7 +20,8 @@ namespace FileManager
         public Button DeleteButton;
         public Button MoveButton;
         public Button CopyButton;
-        public ListView FilesList;
+        public Button CreateButton;
+        public ListView FilesView;
         public StatusStrip StatusBar;
         public ToolStripStatusLabel StatusName;
         public ToolStripStatusLabel StatusType;
@@ -29,6 +30,7 @@ namespace FileManager
         public ToolStripStatusLabel StatusChanged;
         public ToolStripStatusLabel StatusAttr;
         public List<string> ExtensionsList;
+        public List<ListViewItemWithData> FilesList;
 
         private Form1 mainForm;
         private FileManagerController anotherController;
@@ -63,6 +65,7 @@ namespace FileManager
             Button deleteButton,
             Button moveButton,
             Button copyButton,
+            Button createButton,
             ListView listView,
             StatusStrip statusStrip
             )
@@ -76,7 +79,8 @@ namespace FileManager
             this.DeleteButton = deleteButton;
             this.MoveButton = moveButton;
             this.CopyButton = copyButton;
-            this.FilesList = listView;
+            this.CreateButton = createButton;
+            this.FilesView = listView;
             this.StatusBar = statusStrip;
             this.tableLayoutSettings = (TableLayoutSettings)statusStrip.LayoutSettings;
             this.StatusName = (ToolStripStatusLabel)statusStrip.Items[0];
@@ -86,6 +90,7 @@ namespace FileManager
             this.StatusChanged = (ToolStripStatusLabel)statusStrip.Items[4];
             this.StatusAttr = (ToolStripStatusLabel)statusStrip.Items[5];
             this.ExtensionsList = new List<string>();
+            this.FilesList = new List<ListViewItemWithData>();
 
             ClearStatusStrip();
 
@@ -95,10 +100,14 @@ namespace FileManager
 
             this.ExtensionsDropdown.SelectedValueChanged += new System.EventHandler(this.ExtensionDropdown_SelectedValueChanged);
 
-            this.FilesList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.File_SelectionChangeHandler);
-            this.FilesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.File_DoubleClickHandler);
+            this.FilesView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.FilesView_SelectionChangeHandler);
+            this.FilesView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FilesView_DoubleClickHandler);
 
             this.StatusBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.StatusBar_MouseDoubleClick);
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_ClickHandler);
+            this.CreateButton.Click += new System.EventHandler(this.CreateButton_ClickHandler);
+            this.MoveButton.Click += new System.EventHandler(this.MoveButton_ClickHandler);
+            this.CopyButton.Click += new System.EventHandler(this.CopyButton_ClickHandler);
         }
 
         private void ClearStatusStrip()
@@ -118,7 +127,7 @@ namespace FileManager
 
         private void ClearFilesList()
         {
-            FilesList.Items.Clear();
+            FilesList.Clear();
         }
 
         private void FillExtensionsDropdown()
@@ -150,37 +159,67 @@ namespace FileManager
             }
         }
 
-        private void OpenFolder(string path, bool isRefresh = false)
+        private void CheckFilesSelection()
+        {
+            if (FilesView.SelectedItems.Count == 0)
+            {
+                DeleteButton.Enabled = false;
+                CopyButton.Enabled = false;
+                MoveButton.Enabled = false;
+            }
+        }
+
+        private void RenderList()
+        {
+            FilesView.Items.Clear();
+
+            foreach (ListViewItemWithData item in FilesList)
+            {
+                if (item.Type == ListItemType.Folder || item.Type == ListItemType.Backward)
+                {
+                    if ((string)ExtensionsDropdown.SelectedItem == null || (string)ExtensionsDropdown.SelectedItem == "–" || (string)ExtensionsDropdown.SelectedItem == "Папка")
+                    {
+                        FilesView.Items.Add(item);
+                    }
+                }
+
+                if (item.Type == ListItemType.File)
+                {
+                    FileInfo info = (FileInfo)item.GetData();
+
+                    if ((string)ExtensionsDropdown.SelectedItem == null || (string)ExtensionsDropdown.SelectedItem == "–" || (string)ExtensionsDropdown.SelectedItem == info.Extension)
+                    {
+                        FilesView.Items.Add(item);
+                    }
+
+                }
+            }
+        }
+
+        private void GetFolderFiles(string path, bool isAddBackward = false)
         {
             try
             {
                 DirectoryInfo info = new DirectoryInfo(path);
                 DirectoryInfo[] dir = info.GetDirectories();
-                ClearStatusStrip();
-                if (!isRefresh) ClearExtensionsList();
 
-                if (!info.Exists) throw new ArgumentNullException("info");
-
-                currentPath = path;
-                PathTextbox.Text = currentPath;
-                ClearFilesList();
-
-                ComparePaths();
 
                 if (info.Parent != null && info.Parent.Name != "")
                 {
-                    ListViewItem listViewItem = new ListViewItemWithData();
+                    ListViewItemWithData listViewItem = new ListViewItemWithData();
                     listViewItem.Text = @"\..";
                     listViewItem.SubItems.Add("Папка");
                     listViewItem.SubItems.Add("");
                     listViewItem.SubItems.Add("");
 
-                    FilesList.Items.Add(listViewItem);
+                    listViewItem.Type = ListItemType.Backward;
+
+                    if (isAddBackward) FilesList.Add(listViewItem);
                 }
 
                 foreach (DirectoryInfo item in dir)
                 {
-                    ListViewItem listViewItem = new ListViewItemWithData(item);
+                    ListViewItemWithData listViewItem = new ListViewItemWithData(item);
                     listViewItem.Text = item.Name; // Имя
                     listViewItem.SubItems.Add("Папка"); // Тип
                     listViewItem.SubItems.Add(""); // Размер
@@ -194,17 +233,14 @@ namespace FileManager
                     if (!ExtensionsList.Contains("Папка"))
                         ExtensionsList.Add("Папка");
 
-                    if ((string)ExtensionsDropdown.SelectedItem == null || (string)ExtensionsDropdown.SelectedItem == "–" || (string)ExtensionsDropdown.SelectedItem == "Папка")
-                    {
-                        FilesList.Items.Add(listViewItem);
-                    }
+                    FilesList.Add(listViewItem);
                 }
 
                 FileInfo[] files = info.GetFiles();
 
                 foreach (FileInfo item in files)
                 {
-                    ListViewItem listViewItem = new ListViewItemWithData(item);
+                    ListViewItemWithData listViewItem = new ListViewItemWithData(item);
                     listViewItem.Text = item.Name; // Имя
                     listViewItem.SubItems.Add(item.Extension); // Тип
                     listViewItem.SubItems.Add(Helpers.ToFileSize(item.Length)); // Размер
@@ -218,23 +254,43 @@ namespace FileManager
                     if (!ExtensionsList.Contains(item.Extension))
                         ExtensionsList.Add(item.Extension);
 
-                    if ((string)ExtensionsDropdown.SelectedItem == null || (string)ExtensionsDropdown.SelectedItem == "–" || (string)ExtensionsDropdown.SelectedItem == item.Extension)
-                    {
-                        FilesList.Items.Add(listViewItem);
-                    }
-
+                    FilesList.Add(listViewItem);
                 }
 
+            }
+            catch { }
+        }
+
+        private void OpenFolder(string path, bool isRefresh = false)
+        {
+            try
+            {
+                DirectoryInfo info = new DirectoryInfo(path);
+                DirectoryInfo[] dir = info.GetDirectories();
+                ClearStatusStrip();
+                if (!isRefresh) ClearExtensionsList();
+
+                if (!info.Exists) throw new ArgumentNullException("info");
+
+                currentPath = path;
+                PathTextbox.Text = currentPath;
+                ComparePaths();
+                CheckFilesSelection();
+
+                ClearFilesList();
+                GetFolderFiles(path, true);
+
                 if (!isRefresh) FillExtensionsDropdown();
+
+                RenderList();
             }
             catch (UnauthorizedAccessException e)
             {
                 MessageBox.Show("Недостаточно прав для выполнения операции: \n" + e.Message, "Отказано в доступе", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
 
-        private void File_SelectionChangeHandler(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void FilesView_SelectionChangeHandler(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             ListViewItemWithData item = (ListViewItemWithData)e.Item;
 
@@ -260,14 +316,17 @@ namespace FileManager
             }
 
 
-            if (item == null || item.Type == ListItemType.None)
+            if (item == null || item.Type == ListItemType.None || item.Type == ListItemType.Backward)
             {
                 ClearStatusStrip();
                 DeleteButton.Enabled = false;
+                CopyButton.Enabled = false;
+                MoveButton.Enabled = false;
 
                 return;
             }
             DeleteButton.Enabled = true;
+            ComparePaths();
 
             if (item.Type == ListItemType.Folder)
             {
@@ -302,12 +361,11 @@ namespace FileManager
             }
         }
 
-        private void File_DoubleClickHandler(object sender, MouseEventArgs e)
+        private void FilesView_DoubleClickHandler(object sender, MouseEventArgs e)
         {
-            string curPath = currentPath;
             string nextPath = currentPath;
 
-            if (FilesList.SelectedItems[0].Text == @"\..")
+            if (FilesView.SelectedItems[0].Text == @"\..")
             {
                 int lastSlashIdx = nextPath.LastIndexOf(@"\");
                 if (lastSlashIdx > -1)
@@ -326,9 +384,9 @@ namespace FileManager
             {
                 if (!nextPath.EndsWith(@":\")) nextPath += @"\";
 
-                if (FilesList.SelectedItems[0].SubItems[1].Text == "Папка")
+                if (FilesView.SelectedItems[0].SubItems[1].Text == "Папка")
                 {
-                    OpenFolder(nextPath + FilesList.SelectedItems[0].Text);
+                    OpenFolder(nextPath + FilesView.SelectedItems[0].Text);
                 }
             }
         }
@@ -385,6 +443,26 @@ namespace FileManager
         private void ExtensionDropdown_SelectedValueChanged(object sender, EventArgs e)
         {
             OpenFolder(currentPath, true);
+        }
+
+        private void DeleteButton_ClickHandler(object sender, EventArgs e)
+        {
+            // TODO: удаление файлов
+        }
+
+        private void CreateButton_ClickHandler(object sender, EventArgs e)
+        {
+            // TODO: создание файлов
+        }
+
+        private void MoveButton_ClickHandler(object sender, EventArgs e)
+        {
+            // TODO: перемещение файлов
+        }
+
+        private void CopyButton_ClickHandler(object sender, EventArgs e)
+        {
+            // TODO: копирование файлов
         }
     }
 }
