@@ -16,6 +16,9 @@ namespace FileManager
         public ComboBox ExtensionsDropdown;
         public DateTimePicker DateFrom;
         public DateTimePicker DateTo;
+        public CheckBox DateFilter;
+        public RadioButton RadioDateCreated;
+        public RadioButton RadioDateChanged;
         public TextBox SearchTextbox;
         public Button DeleteButton;
         public Button SearchButton;
@@ -71,6 +74,9 @@ namespace FileManager
             ComboBox extDropdown,
             DateTimePicker dateFrom,
             DateTimePicker dateTo,
+            CheckBox dateFilter,
+            RadioButton radioDateCreated,
+            RadioButton radioDateChanged,
             TextBox searchTextbox,
             Button searchButton,
             Button deleteButton,
@@ -87,6 +93,9 @@ namespace FileManager
             this.ExtensionsDropdown = extDropdown;
             this.DateFrom = dateFrom;
             this.DateTo = dateTo;
+            this.DateFilter = dateFilter;
+            this.RadioDateCreated = radioDateCreated;
+            this.RadioDateChanged = radioDateChanged;
             this.SearchTextbox = searchTextbox;
             this.SearchButton = searchButton;
             this.DeleteButton = deleteButton;
@@ -125,6 +134,10 @@ namespace FileManager
             this.MoveButton.Click += new System.EventHandler(this.MoveButton_ClickHandler);
             this.CopyButton.Click += new System.EventHandler(this.CopyButton_ClickHandler);
             this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_ClickHandler);
+            this.DateFilter.CheckedChanged += new System.EventHandler(this.DateFilter_CheckHandler);
+            this.DateFrom.ValueChanged += new System.EventHandler(this.DateFrom_ChangedHandler);
+            this.DateTo.ValueChanged += new System.EventHandler(this.DateTo_ChangedHandler);
+            this.RadioDateCreated.CheckedChanged += new System.EventHandler(this.RadioDate_ChangedHandler);
         }
 
         private void ClearStatusStrip()
@@ -203,12 +216,23 @@ namespace FileManager
             {
                 if (item.Type == ListItemType.Folder || item.Type == ListItemType.Backward)
                 {
+                    DirectoryInfo info = (DirectoryInfo)item.GetData();
+
                     if ((string)ExtensionsDropdown.SelectedItem == null
                         || (string)ExtensionsDropdown.SelectedItem == "–"
                         || (string)ExtensionsDropdown.SelectedItem == "Папка"
                     )
                     {
-                        FilesView.Items.Add(item);
+                        if (item.Type != ListItemType.Backward && DateFilter.Checked)
+                        {
+                            if (RadioDateCreated.Checked && info.CreationTime >= DateFrom.Value && info.CreationTime <= DateTo.Value) { FilesView.Items.Add(item); }
+                            if (RadioDateChanged.Checked && info.LastWriteTime >= DateFrom.Value && info.LastWriteTime <= DateTo.Value) { FilesView.Items.Add(item); }
+                        }
+                        else
+                        {
+                            FilesView.Items.Add(item);
+
+                        }
                     }
                 }
 
@@ -218,7 +242,16 @@ namespace FileManager
 
                     if ((string)ExtensionsDropdown.SelectedItem == null || (string)ExtensionsDropdown.SelectedItem == "–" || (string)ExtensionsDropdown.SelectedItem == info.Extension)
                     {
-                        FilesView.Items.Add(item);
+                        if (DateFilter.Checked)
+                        {
+                            if (RadioDateCreated.Checked && info.CreationTime >= DateFrom.Value && info.CreationTime <= DateTo.Value) { FilesView.Items.Add(item); }
+                            if (RadioDateChanged.Checked && info.LastWriteTime >= DateFrom.Value && info.LastWriteTime <= DateTo.Value) { FilesView.Items.Add(item); }
+                        }
+                        else
+                        {
+                            FilesView.Items.Add(item);
+
+                        }
                     }
 
                 }
@@ -656,17 +689,128 @@ namespace FileManager
         private void CreateButton_ClickHandler(object sender, EventArgs e)
         {
             // TODO: создание файлов
-            Console.WriteLine();
         }
 
         private void MoveButton_ClickHandler(object sender, EventArgs e)
         {
-            // TODO: перемещение файлов
+            try
+            {
+                string message = "Вы уверены, что хотите перместить";
+
+                if (FilesView.SelectedItems.Count > 1)
+                {
+                    message += " выбранные элементы";
+                }
+                else
+                {
+                    message += " выбранный элемент";
+                }
+                message += "?";
+
+
+
+                var answer = MessageBox.Show(message, "Подтвердите действие", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (answer == DialogResult.Yes)
+                {
+
+                    foreach (var selectedItem in FilesView.SelectedItems)
+                    {
+
+
+                        ListViewItemWithData item = (ListViewItemWithData)selectedItem;
+
+                        if (item.Type == ListItemType.Folder)
+                        {
+                            DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
+                            Directory.Move(directoryInfo.FullName, AnotherController.currentPath + @"\" + directoryInfo.Name);
+                            FullRerender();
+
+                        }
+
+                        if (item.Type == ListItemType.File)
+                        {
+                            FileInfo fileInfo = (FileInfo)item.GetData();
+
+                            File.Move(fileInfo.FullName, AnotherController.currentPath + @"\" + fileInfo.Name);
+                            FullRerender();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Отказано в доступе", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void CopyButton_ClickHandler(object sender, EventArgs e)
         {
-            // TODO: копирование файлов
+            try
+            {
+                string message = "Вы уверены, что хотите скопировать";
+
+                if (FilesView.SelectedItems.Count > 1)
+                {
+                    message += " выбранные элементы";
+                }
+                else
+                {
+                    message += " выбранный элемент";
+                }
+                message += "?";
+
+
+
+                var answer = MessageBox.Show(message, "Подтвердите действие", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (answer == DialogResult.Yes)
+                {
+
+                    foreach (var selectedItem in FilesView.SelectedItems)
+                    {
+
+
+                        ListViewItemWithData item = (ListViewItemWithData)selectedItem;
+
+                        if (item.Type == ListItemType.Folder)
+                        {
+                            DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
+
+                            //Создать идентичную структуру папок
+                            foreach (string dirPath in Directory.GetDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories))
+                            {
+
+                                    Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, AnotherController.currentPath));
+
+                            }
+
+                            //Копировать все файлы и перезаписать файлы с идентичным именем
+                            foreach (string newPath in Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
+                            {
+                                    File.Copy(newPath, newPath.Replace(directoryInfo.FullName, AnotherController.currentPath), true);
+                            }
+
+                            FullRerender();
+
+                        }
+
+                        if (item.Type == ListItemType.File)
+                        {
+                            FileInfo fileInfo = (FileInfo)item.GetData();
+
+                            File.Copy(fileInfo.FullName, AnotherController.currentPath + @"\" + fileInfo.Name);
+                            FullRerender();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Отказано в доступе", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void RefreshButton_ClickHandler(object sender, EventArgs e)
@@ -708,6 +852,44 @@ namespace FileManager
             {
                 CancelSearchMode();
             }
+        }
+
+        private void DateFilter_CheckHandler(object sender, EventArgs e)
+        {
+            RenderList();
+        }
+
+        private void DateFrom_ChangedHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DateFrom.Value > DateTo.Value)
+                {
+                    DateTo.Value = DateFrom.Value;
+                }
+
+                if (DateFilter.Checked) RenderList();
+            }
+            catch { }
+        }
+
+        private void DateTo_ChangedHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DateTo.Value < DateFrom.Value)
+                {
+                    DateFrom.Value = DateTo.Value;
+                }
+
+                if (DateFilter.Checked) RenderList();
+            }
+            catch { }
+        }
+
+        private void RadioDate_ChangedHandler(object sender, EventArgs e)
+        {
+            if (DateFilter.Checked) RenderList();
         }
     }
 }

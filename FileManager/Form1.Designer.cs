@@ -84,10 +84,10 @@
             this.toolStripStatusLabel2_dateCreated = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_dateChanged = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_attr = new System.Windows.Forms.ToolStripStatusLabel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton1_dateCreated = new System.Windows.Forms.RadioButton();
+            this.radioButton1_dateChanged = new System.Windows.Forms.RadioButton();
+            this.radioButton2_dateChanged = new System.Windows.Forms.RadioButton();
+            this.radioButton2_dateCreated = new System.Windows.Forms.RadioButton();
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.path1_TextBox = new System.Windows.Forms.TextBox();
@@ -157,8 +157,8 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.button1_refresh);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.radioButton1_dateChanged);
+            this.groupBox1.Controls.Add(this.radioButton1_dateCreated);
             this.groupBox1.Controls.Add(this.checkBox1_dateFilterCheck);
             this.groupBox1.Controls.Add(this.button1_create);
             this.groupBox1.Controls.Add(this.path1_TextBox);
@@ -422,8 +422,8 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button2_refresh);
-            this.groupBox2.Controls.Add(this.radioButton3);
-            this.groupBox2.Controls.Add(this.radioButton4);
+            this.groupBox2.Controls.Add(this.radioButton2_dateChanged);
+            this.groupBox2.Controls.Add(this.radioButton2_dateCreated);
             this.groupBox2.Controls.Add(this.checkBox2_dateFilterCheck);
             this.groupBox2.Controls.Add(this.button2_create);
             this.groupBox2.Controls.Add(this.path2_TextBox);
@@ -670,49 +670,49 @@
             this.toolStripStatusLabel2_attr.Text = "Атрибуты: –";
             this.toolStripStatusLabel2_attr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // radioButton1
+            // radioButton1_dateCreated
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(135, 87);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(53, 17);
-            this.radioButton1.TabIndex = 13;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Созд.";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1_dateCreated.AutoSize = true;
+            this.radioButton1_dateCreated.Checked = true;
+            this.radioButton1_dateCreated.Location = new System.Drawing.Point(135, 87);
+            this.radioButton1_dateCreated.Name = "radioButton1_dateCreated";
+            this.radioButton1_dateCreated.Size = new System.Drawing.Size(53, 17);
+            this.radioButton1_dateCreated.TabIndex = 13;
+            this.radioButton1_dateCreated.TabStop = true;
+            this.radioButton1_dateCreated.Text = "Созд.";
+            this.radioButton1_dateCreated.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // radioButton1_dateChanged
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(191, 87);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(50, 17);
-            this.radioButton2.TabIndex = 14;
-            this.radioButton2.Text = "Изм.";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton1_dateChanged.AutoSize = true;
+            this.radioButton1_dateChanged.Location = new System.Drawing.Point(191, 87);
+            this.radioButton1_dateChanged.Name = "radioButton1_dateChanged";
+            this.radioButton1_dateChanged.Size = new System.Drawing.Size(50, 17);
+            this.radioButton1_dateChanged.TabIndex = 14;
+            this.radioButton1_dateChanged.Text = "Изм.";
+            this.radioButton1_dateChanged.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // radioButton2_dateChanged
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(188, 86);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(50, 17);
-            this.radioButton3.TabIndex = 24;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Изм.";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton2_dateChanged.AutoSize = true;
+            this.radioButton2_dateChanged.Location = new System.Drawing.Point(188, 86);
+            this.radioButton2_dateChanged.Name = "radioButton2_dateChanged";
+            this.radioButton2_dateChanged.Size = new System.Drawing.Size(50, 17);
+            this.radioButton2_dateChanged.TabIndex = 24;
+            this.radioButton2_dateChanged.Text = "Изм.";
+            this.radioButton2_dateChanged.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // radioButton2_dateCreated
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(132, 86);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(53, 17);
-            this.radioButton4.TabIndex = 23;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Созд.";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton2_dateCreated.AutoSize = true;
+            this.radioButton2_dateCreated.Checked = true;
+            this.radioButton2_dateCreated.Location = new System.Drawing.Point(132, 86);
+            this.radioButton2_dateCreated.Name = "radioButton2_dateCreated";
+            this.radioButton2_dateCreated.Size = new System.Drawing.Size(53, 17);
+            this.radioButton2_dateCreated.TabIndex = 23;
+            this.radioButton2_dateCreated.TabStop = true;
+            this.radioButton2_dateCreated.Text = "Созд.";
+            this.radioButton2_dateCreated.UseVisualStyleBackColor = true;
             // 
             // columnHeader12
             // 
@@ -847,10 +847,10 @@
         private System.Windows.Forms.Button button2_create;
         private System.Windows.Forms.CheckBox checkBox1_dateFilterCheck;
         private System.Windows.Forms.CheckBox checkBox2_dateFilterCheck;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton radioButton1_dateChanged;
+        private System.Windows.Forms.RadioButton radioButton1_dateCreated;
+        private System.Windows.Forms.RadioButton radioButton2_dateChanged;
+        private System.Windows.Forms.RadioButton radioButton2_dateCreated;
         private System.Windows.Forms.ColumnHeader columnHeader12;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.TextBox path1_TextBox;
