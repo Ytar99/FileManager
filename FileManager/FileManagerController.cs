@@ -186,19 +186,19 @@ namespace FileManager
             {
                 MoveButton.Enabled = false;
                 CopyButton.Enabled = false;
-                AnotherController.MoveButton.Enabled = false;
-                AnotherController.CopyButton.Enabled = false;
+                return;
             }
-            else
-            {
-                MoveButton.Enabled = true;
-                CopyButton.Enabled = true;
-                CheckFilesSelection();
 
-                AnotherController.MoveButton.Enabled = true;
-                AnotherController.CopyButton.Enabled = true;
-                AnotherController.CheckFilesSelection();
+            if (AnotherController.IsSearchMode)
+            {
+                MoveButton.Enabled = false;
+                CopyButton.Enabled = false;
+                return;
             }
+
+            MoveButton.Enabled = true;
+            CopyButton.Enabled = true;
+            CheckFilesSelection();
 
         }
 
