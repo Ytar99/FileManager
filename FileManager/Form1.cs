@@ -31,10 +31,12 @@ namespace FileManager
                 dateTimePicker1_from, 
                 dateTimePicker1_to, 
                 search1_TextBox, 
+                button1_search,
                 button1_delete, 
                 button1_moveToRight, 
                 button1_copyToRight,
                 button1_create,
+                button1_refresh,
                 listView1, 
                 statusStrip1
                 );
@@ -46,10 +48,12 @@ namespace FileManager
                 dateTimePicker2_from,
                 dateTimePicker2_to,
                 search2_TextBox,
+                button2_search,
                 button2_delete,
                 button2_moveToLeft,
                 button2_copyToLeft,
                 button2_create,
+                button2_refresh,
                 listView2,
                 statusStrip2
                 );

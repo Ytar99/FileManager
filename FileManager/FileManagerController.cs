@@ -18,9 +18,11 @@ namespace FileManager
         public DateTimePicker DateTo;
         public TextBox SearchTextbox;
         public Button DeleteButton;
+        public Button SearchButton;
         public Button MoveButton;
         public Button CopyButton;
         public Button CreateButton;
+        public Button RefreshButton;
         public ListView FilesView;
         public StatusStrip StatusBar;
         public ToolStripStatusLabel StatusName;
@@ -49,11 +51,19 @@ namespace FileManager
             }
         }
 
+        public bool IsSearchMode
+        {
+            get { return isSearchMode; }
+            set { isSearchMode = value; }
+        }
+
         private TableLayoutSettings tableLayoutSettings;
         private string currentPath;
 
         private Task currentTask;
         private CancellationTokenSource cancelTokenSource;
+
+        private bool isSearchMode = false;
 
         public FileManagerController(
             Form1 mainForm,
@@ -62,10 +72,12 @@ namespace FileManager
             DateTimePicker dateFrom,
             DateTimePicker dateTo,
             TextBox searchTextbox,
+            Button searchButton,
             Button deleteButton,
             Button moveButton,
             Button copyButton,
             Button createButton,
+            Button refreshButton,
             ListView listView,
             StatusStrip statusStrip
             )
@@ -76,10 +88,12 @@ namespace FileManager
             this.DateFrom = dateFrom;
             this.DateTo = dateTo;
             this.SearchTextbox = searchTextbox;
+            this.SearchButton = searchButton;
             this.DeleteButton = deleteButton;
             this.MoveButton = moveButton;
             this.CopyButton = copyButton;
             this.CreateButton = createButton;
+            this.RefreshButton = refreshButton;
             this.FilesView = listView;
             this.StatusBar = statusStrip;
             this.tableLayoutSettings = (TableLayoutSettings)statusStrip.LayoutSettings;
@@ -94,6 +108,7 @@ namespace FileManager
 
             ClearStatusStrip();
 
+            this.SearchTextbox.TextChanged += new System.EventHandler(this.SearchTextbox_TextChangedHandler);
             this.PathTextbox.TextChanged += new System.EventHandler(this.PathTextbox_TextChangedHandler);
             this.PathTextbox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PathTextbox_KeyUpHandler);
             this.PathTextbox.Leave += new System.EventHandler(this.PathTextbox_LeaveHandler);
@@ -104,10 +119,12 @@ namespace FileManager
             this.FilesView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FilesView_DoubleClickHandler);
 
             this.StatusBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.StatusBar_MouseDoubleClick);
+            this.SearchButton.Click += new System.EventHandler(this.SearchButton_ClickHandler);
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_ClickHandler);
             this.CreateButton.Click += new System.EventHandler(this.CreateButton_ClickHandler);
             this.MoveButton.Click += new System.EventHandler(this.MoveButton_ClickHandler);
             this.CopyButton.Click += new System.EventHandler(this.CopyButton_ClickHandler);
+            this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_ClickHandler);
         }
 
         private void ClearStatusStrip()
@@ -134,6 +151,7 @@ namespace FileManager
         {
             ExtensionsDropdown.Items.Clear();
             ExtensionsDropdown.Items.Add("–");
+            ExtensionsList.Sort();
             foreach (var item in ExtensionsList)
             {
                 ExtensionsDropdown.Items.Add(item);
@@ -141,9 +159,13 @@ namespace FileManager
             ExtensionsDropdown.SelectedIndex = 0;
         }
 
-        private void ComparePaths()
+        private void ComparePaths(string path = "")
         {
-            if (currentPath == AnotherController.currentPath)
+            string curPath = currentPath;
+
+            if (path != "") curPath = path;
+
+            if (curPath == AnotherController.currentPath)
             {
                 MoveButton.Enabled = false;
                 CopyButton.Enabled = false;
@@ -154,12 +176,16 @@ namespace FileManager
             {
                 MoveButton.Enabled = true;
                 CopyButton.Enabled = true;
+                CheckFilesSelection();
+
                 AnotherController.MoveButton.Enabled = true;
                 AnotherController.CopyButton.Enabled = true;
+                AnotherController.CheckFilesSelection();
             }
+
         }
 
-        private void CheckFilesSelection()
+        public void CheckFilesSelection()
         {
             if (FilesView.SelectedItems.Count == 0)
             {
@@ -169,7 +195,7 @@ namespace FileManager
             }
         }
 
-        private void RenderList()
+        public void RenderList()
         {
             FilesView.Items.Clear();
 
@@ -177,7 +203,10 @@ namespace FileManager
             {
                 if (item.Type == ListItemType.Folder || item.Type == ListItemType.Backward)
                 {
-                    if ((string)ExtensionsDropdown.SelectedItem == null || (string)ExtensionsDropdown.SelectedItem == "–" || (string)ExtensionsDropdown.SelectedItem == "Папка")
+                    if ((string)ExtensionsDropdown.SelectedItem == null
+                        || (string)ExtensionsDropdown.SelectedItem == "–"
+                        || (string)ExtensionsDropdown.SelectedItem == "Папка"
+                    )
                     {
                         FilesView.Items.Add(item);
                     }
@@ -196,19 +225,42 @@ namespace FileManager
             }
         }
 
+        public void FullRerender(bool isCaller = true)
+        {
+            if (isSearchMode)
+            {
+                SearchByKeyword();
+            }
+            else
+            {
+                OpenFolder(currentPath);
+            }
+
+            if (isCaller) AnotherController.FullRerender(false);
+        }
         private void GetFolderFiles(string path, bool isAddBackward = false)
         {
+            bool dirSuccess = false;
+
+            DirectoryInfo info = new DirectoryInfo(path);
+            DirectoryInfo[] dir = new DirectoryInfo[0];
+
             try
             {
-                DirectoryInfo info = new DirectoryInfo(path);
-                DirectoryInfo[] dir = info.GetDirectories();
+                dir = info.GetDirectories();
+                dirSuccess = true;
+            }
+            catch { }
 
+            if (dirSuccess)
+            {
 
                 if (info.Parent != null && info.Parent.Name != "")
                 {
                     ListViewItemWithData listViewItem = new ListViewItemWithData();
                     listViewItem.Text = @"\..";
                     listViewItem.SubItems.Add("Папка");
+                    listViewItem.SubItems.Add("");
                     listViewItem.SubItems.Add("");
                     listViewItem.SubItems.Add("");
 
@@ -225,6 +277,7 @@ namespace FileManager
                     listViewItem.SubItems.Add(""); // Размер
                     listViewItem.SubItems.Add(item.CreationTime.ToString()); // Дата создания
                     listViewItem.SubItems.Add(item.LastWriteTime.ToString()); // Дата изменения
+                    listViewItem.SubItems.Add(item.Parent.FullName); // Путь до директории
 
                     if (item.Attributes.HasFlag(FileAttributes.Hidden)) listViewItem.ForeColor = Color.Gray; // Скрытый
                     if (item.Attributes.HasFlag(FileAttributes.System)) listViewItem.ForeColor = Color.Blue; // Системный
@@ -233,32 +286,67 @@ namespace FileManager
                     if (!ExtensionsList.Contains("Папка"))
                         ExtensionsList.Add("Папка");
 
-                    FilesList.Add(listViewItem);
+                    if (isSearchMode)
+                    {
+                        if (item.Name.ToLower().Contains(SearchTextbox.Text.ToLower()))
+                        {
+                            FilesList.Add(listViewItem);
+                        }
+                        GetFolderFiles(item.FullName);
+                    }
+                    else
+                    {
+                        FilesList.Add(listViewItem);
+                    }
                 }
 
-                FileInfo[] files = info.GetFiles();
+                bool fileSuccess = false;
+                FileInfo[] files = new FileInfo[0];
 
-                foreach (FileInfo item in files)
+
+                try
                 {
-                    ListViewItemWithData listViewItem = new ListViewItemWithData(item);
-                    listViewItem.Text = item.Name; // Имя
-                    listViewItem.SubItems.Add(item.Extension); // Тип
-                    listViewItem.SubItems.Add(Helpers.ToFileSize(item.Length)); // Размер
-                    listViewItem.SubItems.Add(item.CreationTime.ToString()); // Дата создания
-                    listViewItem.SubItems.Add(item.LastWriteTime.ToString()); // Дата изменения
-
-                    if (item.Attributes.HasFlag(FileAttributes.Hidden)) listViewItem.ForeColor = Color.Gray; // Скрытый
-                    if (item.Attributes.HasFlag(FileAttributes.System)) listViewItem.ForeColor = Color.Blue; // Системный
-
-
-                    if (!ExtensionsList.Contains(item.Extension))
-                        ExtensionsList.Add(item.Extension);
-
-                    FilesList.Add(listViewItem);
+                    files = info.GetFiles();
+                    fileSuccess = true;
                 }
+                catch { }
 
+                if (fileSuccess)
+                {
+                    foreach (FileInfo item in files)
+                    {
+                        ListViewItemWithData listViewItem = new ListViewItemWithData(item);
+                        listViewItem.Text = item.Name; // Имя
+                        if (listViewItem.Text == "") listViewItem.Text = "(unknown_name)";
+                        listViewItem.SubItems.Add(item.Extension); // Тип
+                        listViewItem.SubItems.Add(Helpers.ToFileSize(item.Length)); // Размер
+                        listViewItem.SubItems.Add(item.CreationTime.ToString()); // Дата создания
+                        listViewItem.SubItems.Add(item.LastWriteTime.ToString()); // Дата изменения
+                        listViewItem.SubItems.Add(item.DirectoryName); // Путь до директории
+
+                        if (item.Attributes.HasFlag(FileAttributes.Hidden)) listViewItem.ForeColor = Color.Gray; // Скрытый
+                        if (item.Attributes.HasFlag(FileAttributes.System)) listViewItem.ForeColor = Color.Blue; // Системный
+
+                        if (isSearchMode)
+                        {
+                            if (item.Name.ToLower().Contains(SearchTextbox.Text.ToLower()))
+                            {
+                                if (!ExtensionsList.Contains(item.Extension))
+                                    ExtensionsList.Add(item.Extension);
+
+                                FilesList.Add(listViewItem);
+                            }
+                        }
+                        else
+                        {
+                            if (!ExtensionsList.Contains(item.Extension))
+                                ExtensionsList.Add(item.Extension);
+
+                            FilesList.Add(listViewItem);
+                        }
+                    }
+                }
             }
-            catch { }
         }
 
         private void OpenFolder(string path, bool isRefresh = false)
@@ -268,21 +356,24 @@ namespace FileManager
                 DirectoryInfo info = new DirectoryInfo(path);
                 DirectoryInfo[] dir = info.GetDirectories();
                 ClearStatusStrip();
+
                 if (!isRefresh) ClearExtensionsList();
 
                 if (!info.Exists) throw new ArgumentNullException("info");
 
                 currentPath = path;
                 PathTextbox.Text = currentPath;
-                ComparePaths();
-                CheckFilesSelection();
 
                 ClearFilesList();
+
                 GetFolderFiles(path, true);
+
+                CreateButton.Enabled = true;
 
                 if (!isRefresh) FillExtensionsDropdown();
 
                 RenderList();
+                ComparePaths();
             }
             catch (UnauthorizedAccessException e)
             {
@@ -290,12 +381,26 @@ namespace FileManager
             }
         }
 
+        private void SearchByKeyword()
+        {
+            mainForm.Cursor = Cursors.WaitCursor;
+            mainForm.Enabled = false;
+
+            ClearFilesList();
+            DirectoryInfo currentDirectory = new DirectoryInfo(currentPath);
+
+            GetFolderFiles(currentDirectory.FullName, false);
+
+            FillExtensionsDropdown();
+            RenderList();
+
+            mainForm.Cursor = Cursors.Default;
+            mainForm.Enabled = true;
+        }
+
         private void FilesView_SelectionChangeHandler(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             ListViewItemWithData item = (ListViewItemWithData)e.Item;
-
-            if (!e.IsSelected)
-                item = null;
 
             if (currentTask != null)
             {
@@ -316,7 +421,7 @@ namespace FileManager
             }
 
 
-            if (item == null || item.Type == ListItemType.None || item.Type == ListItemType.Backward)
+            if (FilesView.SelectedItems.Count < 1 || item.Type == ListItemType.None || item.Type == ListItemType.Backward)
             {
                 ClearStatusStrip();
                 DeleteButton.Enabled = false;
@@ -326,46 +431,52 @@ namespace FileManager
                 return;
             }
             DeleteButton.Enabled = true;
-            ComparePaths();
 
-            if (item.Type == ListItemType.Folder)
+            if (FilesView.SelectedItems.Count == 1)
             {
-                DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
-                StatusName.Text = "Имя: " + directoryInfo.Name;
-                StatusType.Text = "Тип: " + "Папка";
-                StatusSize.Text = "Размер: " + "загрузка...";
-                StatusCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString();
-                StatusChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString();
-                StatusAttr.Text = "Атрибуты: " + directoryInfo.Attributes.ToString();
-
-                cancelTokenSource = new CancellationTokenSource();
-                currentTask = Task.Run(() =>
+                if (item.Type == ListItemType.Folder)
                 {
-                    if (cancelTokenSource.Token.IsCancellationRequested)
-                        cancelTokenSource.Token.ThrowIfCancellationRequested(); // генерируем исключение
+                    DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
+                    ComparePaths(directoryInfo.Parent.FullName);
+                    StatusName.Text = "Имя: " + directoryInfo.Name;
+                    StatusType.Text = "Тип: " + "Папка";
+                    StatusSize.Text = "Размер: " + "загрузка...";
+                    StatusCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString();
+                    StatusChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString();
+                    StatusAttr.Text = "Атрибуты: " + directoryInfo.Attributes.ToString();
 
-                    StatusSize.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSource.Token));
-                }, cancelTokenSource.Token);
+                    cancelTokenSource = new CancellationTokenSource();
+                    currentTask = Task.Run(() =>
+                    {
+                        if (cancelTokenSource.Token.IsCancellationRequested)
+                            cancelTokenSource.Token.ThrowIfCancellationRequested(); // генерируем исключение
+
+                        StatusSize.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSource.Token));
+                    }, cancelTokenSource.Token);
+                }
+
+                if (item.Type == ListItemType.File)
+                {
+                    FileInfo fileInfo = (FileInfo)item.GetData();
+                    ComparePaths(fileInfo.DirectoryName);
+
+                    StatusName.Text = "Имя: " + fileInfo.Name;
+                    StatusType.Text = "Тип: " + fileInfo.Extension;
+                    StatusSize.Text = "Размер: " + Helpers.ToFileSize(fileInfo.Length);
+                    StatusCreated.Text = "Создан: " + fileInfo.CreationTime.ToString();
+                    StatusChanged.Text = "Изменён: " + fileInfo.LastWriteTime.ToString();
+                    StatusAttr.Text = "Атрибуты: " + fileInfo.Attributes.ToString();
+                }
             }
-
-            if (item.Type == ListItemType.File)
-            {
-                FileInfo fileInfo = (FileInfo)item.GetData();
-
-                StatusName.Text = "Имя: " + fileInfo.Name;
-                StatusType.Text = "Тип: " + fileInfo.Extension;
-                StatusSize.Text = "Размер: " + Helpers.ToFileSize(fileInfo.Length);
-                StatusCreated.Text = "Создан: " + fileInfo.CreationTime.ToString();
-                StatusChanged.Text = "Изменён: " + fileInfo.LastWriteTime.ToString();
-                StatusAttr.Text = "Атрибуты: " + fileInfo.Attributes.ToString();
-            }
+            else { ClearStatusStrip(); }
         }
 
         private void FilesView_DoubleClickHandler(object sender, MouseEventArgs e)
         {
             string nextPath = currentPath;
+            ListViewItemWithData item = (ListViewItemWithData)FilesView.SelectedItems[0];
 
-            if (FilesView.SelectedItems[0].Text == @"\..")
+            if (item.Text == @"\..")
             {
                 int lastSlashIdx = nextPath.LastIndexOf(@"\");
                 if (lastSlashIdx > -1)
@@ -384,12 +495,41 @@ namespace FileManager
             {
                 if (!nextPath.EndsWith(@":\")) nextPath += @"\";
 
-                if (FilesView.SelectedItems[0].SubItems[1].Text == "Папка")
+
+                if (item.Type == ListItemType.Folder)
                 {
-                    OpenFolder(nextPath + FilesView.SelectedItems[0].Text);
+                    DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
+
+                    if (isSearchMode)
+                    {
+                        OpenFolder(directoryInfo.Parent.FullName);
+                        CancelSearchMode();
+                    }
+                    else
+                    {
+                        OpenFolder(directoryInfo.FullName);
+                    }
+                }
+
+                if (item.Type == ListItemType.File)
+                {
+                    FileInfo fileInfo = (FileInfo)item.GetData();
+
+                    if (isSearchMode)
+                    {
+                        OpenFolder(fileInfo.DirectoryName);
+                        CancelSearchMode();
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
         }
+
+
+
 
         private void PathTextbox_LeaveHandler(object sender, EventArgs e)
         {
@@ -423,6 +563,19 @@ namespace FileManager
             textbox.SelectionLength = 0;
         }
 
+        private void SearchTextbox_TextChangedHandler(object sender, EventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            if (textbox.Text.Length == 0)
+            {
+                SearchButton.Enabled = false;
+            }
+            else
+            {
+                SearchButton.Enabled = true;
+            }
+        }
+
         private void StatusBar_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             StatusStrip statusStrip = sender as StatusStrip;
@@ -442,17 +595,68 @@ namespace FileManager
 
         private void ExtensionDropdown_SelectedValueChanged(object sender, EventArgs e)
         {
-            OpenFolder(currentPath, true);
+            RenderList();
         }
 
         private void DeleteButton_ClickHandler(object sender, EventArgs e)
         {
-            // TODO: удаление файлов
+            try
+            {
+                string message = "Вы уверены, что хотите безвозвратно удалить";
+
+                if (FilesView.SelectedItems.Count > 1)
+                {
+                    message += " выбранные элементы";
+                }
+                else
+                {
+                    message += " выбранный элемент";
+                }
+                message += "?";
+
+
+
+                var answer = MessageBox.Show(message, "Подтвердите действие", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (answer == DialogResult.Yes)
+                {
+
+                    foreach (var selectedItem in FilesView.SelectedItems)
+                    {
+
+
+                        ListViewItemWithData item = (ListViewItemWithData)selectedItem;
+
+                        if (item.Type == ListItemType.Folder)
+                        {
+                            DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
+
+                            Directory.Delete(directoryInfo.FullName, true);
+                            FullRerender();
+
+                        }
+
+                        if (item.Type == ListItemType.File)
+                        {
+                            FileInfo fileInfo = (FileInfo)item.GetData();
+
+                            File.Delete(fileInfo.FullName);
+                            FullRerender();
+                        }
+
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException error)
+            {
+                MessageBox.Show("Недостаточно прав для выполнения операции: \n" + error.Message, "Отказано в доступе", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void CreateButton_ClickHandler(object sender, EventArgs e)
         {
             // TODO: создание файлов
+            Console.WriteLine();
         }
 
         private void MoveButton_ClickHandler(object sender, EventArgs e)
@@ -463,6 +667,47 @@ namespace FileManager
         private void CopyButton_ClickHandler(object sender, EventArgs e)
         {
             // TODO: копирование файлов
+        }
+
+        private void RefreshButton_ClickHandler(object sender, EventArgs e)
+        {
+            if (!isSearchMode)
+            {
+                OpenFolder(currentPath);
+            }
+        }
+
+        private void CancelSearchMode()
+        {
+            isSearchMode = false;
+            SearchTextbox.Enabled = true;
+            PathTextbox.Enabled = true;
+            RefreshButton.Enabled = true;
+
+            SearchTextbox.BackColor = SystemColors.Window;
+            SearchTextbox.Text = "";
+            SearchButton.Text = "Поиск";
+            OpenFolder(currentPath);
+        }
+
+        private void SearchButton_ClickHandler(object sender, EventArgs e)
+        {
+            if (!isSearchMode)
+            {
+                isSearchMode = true;
+                SearchTextbox.Enabled = false;
+                PathTextbox.Enabled = false;
+                CreateButton.Enabled = false;
+                RefreshButton.Enabled = false;
+
+                SearchTextbox.BackColor = Color.PaleGoldenrod;
+                SearchButton.Text = "Отмена";
+                SearchByKeyword();
+            }
+            else
+            {
+                CancelSearchMode();
+            }
         }
     }
 }

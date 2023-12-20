@@ -31,8 +31,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.path1_TextBox = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.checkBox1_dateFilterCheck = new System.Windows.Forms.CheckBox();
+            this.button1_create = new System.Windows.Forms.Button();
+            this.button1_search = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.button1_moveToRight = new System.Windows.Forms.Button();
             this.comboBox1_ext = new System.Windows.Forms.ComboBox();
@@ -57,8 +58,10 @@
             this.toolStripStatusLabel1_attr = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBox2_dateFilterCheck = new System.Windows.Forms.CheckBox();
+            this.button2_create = new System.Windows.Forms.Button();
             this.path2_TextBox = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.button2_search = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.button2_moveToLeft = new System.Windows.Forms.Button();
             this.comboBox2_ext = new System.Windows.Forms.ComboBox();
@@ -69,11 +72,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.search2_TextBox = new System.Windows.Forms.TextBox();
             this.listView2 = new System.Windows.Forms.ListView();
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2_name = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_type = new System.Windows.Forms.ToolStripStatusLabel();
@@ -81,10 +84,15 @@
             this.toolStripStatusLabel2_dateCreated = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_dateChanged = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_attr = new System.Windows.Forms.ToolStripStatusLabel();
-            this.button1_create = new System.Windows.Forms.Button();
-            this.button2_create = new System.Windows.Forms.Button();
-            this.checkBox1_dateFilterCheck = new System.Windows.Forms.CheckBox();
-            this.checkBox2_dateFilterCheck = new System.Windows.Forms.CheckBox();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.path1_TextBox = new System.Windows.Forms.TextBox();
+            this.button1_refresh = new System.Windows.Forms.Button();
+            this.button2_refresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -120,8 +128,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer1.Panel2.Controls.Add(this.statusStrip2);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 610);
-            this.splitContainer1.SplitterDistance = 397;
+            this.splitContainer1.Size = new System.Drawing.Size(784, 610);
+            this.splitContainer1.SplitterDistance = 389;
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
             // 
@@ -141,17 +149,20 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.listView1);
-            this.splitContainer2.Size = new System.Drawing.Size(393, 582);
+            this.splitContainer2.Size = new System.Drawing.Size(385, 582);
             this.splitContainer2.SplitterDistance = 184;
             this.splitContainer2.TabIndex = 1;
             this.splitContainer2.TabStop = false;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1_refresh);
+            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Controls.Add(this.checkBox1_dateFilterCheck);
             this.groupBox1.Controls.Add(this.button1_create);
             this.groupBox1.Controls.Add(this.path1_TextBox);
-            this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.button1_search);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.button1_moveToRight);
             this.groupBox1.Controls.Add(this.comboBox1_ext);
@@ -164,28 +175,41 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(393, 184);
+            this.groupBox1.Size = new System.Drawing.Size(385, 184);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Первая директория";
             // 
-            // path1_TextBox
+            // checkBox1_dateFilterCheck
             // 
-            this.path1_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.path1_TextBox.Location = new System.Drawing.Point(9, 16);
-            this.path1_TextBox.Name = "path1_TextBox";
-            this.path1_TextBox.Size = new System.Drawing.Size(378, 20);
-            this.path1_TextBox.TabIndex = 1;
+            this.checkBox1_dateFilterCheck.AutoSize = true;
+            this.checkBox1_dateFilterCheck.Location = new System.Drawing.Point(9, 87);
+            this.checkBox1_dateFilterCheck.Name = "checkBox1_dateFilterCheck";
+            this.checkBox1_dateFilterCheck.Size = new System.Drawing.Size(115, 17);
+            this.checkBox1_dateFilterCheck.TabIndex = 12;
+            this.checkBox1_dateFilterCheck.Text = "Фильтр по датам";
+            this.checkBox1_dateFilterCheck.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // button1_create
             // 
-            this.button4.Location = new System.Drawing.Point(191, 148);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(64, 23);
-            this.button4.TabIndex = 6;
-            this.button4.Text = "Поиск";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button1_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1_create.Enabled = false;
+            this.button1_create.Location = new System.Drawing.Point(277, 116);
+            this.button1_create.Name = "button1_create";
+            this.button1_create.Size = new System.Drawing.Size(105, 23);
+            this.button1_create.TabIndex = 11;
+            this.button1_create.Text = "Создать";
+            this.button1_create.UseVisualStyleBackColor = true;
+            // 
+            // button1_search
+            // 
+            this.button1_search.Enabled = false;
+            this.button1_search.Location = new System.Drawing.Point(191, 148);
+            this.button1_search.Name = "button1_search";
+            this.button1_search.Size = new System.Drawing.Size(64, 23);
+            this.button1_search.TabIndex = 6;
+            this.button1_search.Text = "Поиск";
+            this.button1_search.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -199,7 +223,7 @@
             // button1_moveToRight
             // 
             this.button1_moveToRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_moveToRight.Location = new System.Drawing.Point(285, 44);
+            this.button1_moveToRight.Location = new System.Drawing.Point(277, 44);
             this.button1_moveToRight.Name = "button1_moveToRight";
             this.button1_moveToRight.Size = new System.Drawing.Size(105, 23);
             this.button1_moveToRight.TabIndex = 9;
@@ -218,7 +242,7 @@
             // button1_copyToRight
             // 
             this.button1_copyToRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_copyToRight.Location = new System.Drawing.Point(285, 68);
+            this.button1_copyToRight.Location = new System.Drawing.Point(277, 68);
             this.button1_copyToRight.Name = "button1_copyToRight";
             this.button1_copyToRight.Size = new System.Drawing.Size(105, 23);
             this.button1_copyToRight.TabIndex = 10;
@@ -235,7 +259,7 @@
             // button1_delete
             // 
             this.button1_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_delete.Location = new System.Drawing.Point(285, 92);
+            this.button1_delete.Location = new System.Drawing.Point(277, 92);
             this.button1_delete.Name = "button1_delete";
             this.button1_delete.Size = new System.Drawing.Size(105, 23);
             this.button1_delete.TabIndex = 8;
@@ -260,6 +284,7 @@
             // 
             // search1_TextBox
             // 
+            this.search1_TextBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.search1_TextBox.Location = new System.Drawing.Point(9, 150);
             this.search1_TextBox.Name = "search1_TextBox";
             this.search1_TextBox.Size = new System.Drawing.Size(176, 20);
@@ -272,14 +297,15 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader6});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.LabelWrap = false;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(393, 394);
+            this.listView1.Size = new System.Drawing.Size(385, 394);
             this.listView1.TabIndex = 7;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -287,17 +313,16 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Имя";
-            this.columnHeader1.Width = 80;
+            this.columnHeader1.Width = 100;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Тип";
-            this.columnHeader2.Width = 80;
+            this.columnHeader2.Width = 50;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Размер";
-            this.columnHeader3.Width = 80;
             // 
             // columnHeader4
             // 
@@ -320,7 +345,7 @@
             this.toolStripStatusLabel1_attr});
             this.statusStrip1.Location = new System.Drawing.Point(0, 582);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(393, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(385, 24);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "Item info";
@@ -389,17 +414,20 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.listView2);
-            this.splitContainer3.Size = new System.Drawing.Size(395, 582);
+            this.splitContainer3.Size = new System.Drawing.Size(387, 582);
             this.splitContainer3.SplitterDistance = 184;
             this.splitContainer3.TabIndex = 2;
             this.splitContainer3.TabStop = false;
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button2_refresh);
+            this.groupBox2.Controls.Add(this.radioButton3);
+            this.groupBox2.Controls.Add(this.radioButton4);
             this.groupBox2.Controls.Add(this.checkBox2_dateFilterCheck);
             this.groupBox2.Controls.Add(this.button2_create);
             this.groupBox2.Controls.Add(this.path2_TextBox);
-            this.groupBox2.Controls.Add(this.button5);
+            this.groupBox2.Controls.Add(this.button2_search);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.button2_moveToLeft);
             this.groupBox2.Controls.Add(this.comboBox2_ext);
@@ -412,10 +440,31 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(395, 184);
+            this.groupBox2.Size = new System.Drawing.Size(387, 184);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Вторая директория";
+            // 
+            // checkBox2_dateFilterCheck
+            // 
+            this.checkBox2_dateFilterCheck.AutoSize = true;
+            this.checkBox2_dateFilterCheck.Location = new System.Drawing.Point(6, 87);
+            this.checkBox2_dateFilterCheck.Name = "checkBox2_dateFilterCheck";
+            this.checkBox2_dateFilterCheck.Size = new System.Drawing.Size(115, 17);
+            this.checkBox2_dateFilterCheck.TabIndex = 22;
+            this.checkBox2_dateFilterCheck.Text = "Фильтр по датам";
+            this.checkBox2_dateFilterCheck.UseVisualStyleBackColor = true;
+            // 
+            // button2_create
+            // 
+            this.button2_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2_create.Enabled = false;
+            this.button2_create.Location = new System.Drawing.Point(276, 116);
+            this.button2_create.Name = "button2_create";
+            this.button2_create.Size = new System.Drawing.Size(105, 23);
+            this.button2_create.TabIndex = 21;
+            this.button2_create.Text = "Создать";
+            this.button2_create.UseVisualStyleBackColor = true;
             // 
             // path2_TextBox
             // 
@@ -423,17 +472,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.path2_TextBox.Location = new System.Drawing.Point(6, 16);
             this.path2_TextBox.Name = "path2_TextBox";
-            this.path2_TextBox.Size = new System.Drawing.Size(383, 20);
+            this.path2_TextBox.Size = new System.Drawing.Size(246, 20);
             this.path2_TextBox.TabIndex = 11;
             // 
-            // button5
+            // button2_search
             // 
-            this.button5.Location = new System.Drawing.Point(188, 148);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(64, 23);
-            this.button5.TabIndex = 16;
-            this.button5.Text = "Поиск";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button2_search.Enabled = false;
+            this.button2_search.Location = new System.Drawing.Point(188, 148);
+            this.button2_search.Name = "button2_search";
+            this.button2_search.Size = new System.Drawing.Size(64, 23);
+            this.button2_search.TabIndex = 16;
+            this.button2_search.Text = "Поиск";
+            this.button2_search.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -447,7 +497,7 @@
             // button2_moveToLeft
             // 
             this.button2_moveToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_moveToLeft.Location = new System.Drawing.Point(284, 44);
+            this.button2_moveToLeft.Location = new System.Drawing.Point(276, 44);
             this.button2_moveToLeft.Name = "button2_moveToLeft";
             this.button2_moveToLeft.Size = new System.Drawing.Size(105, 23);
             this.button2_moveToLeft.TabIndex = 19;
@@ -466,7 +516,7 @@
             // button2_copyToLeft
             // 
             this.button2_copyToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_copyToLeft.Location = new System.Drawing.Point(284, 68);
+            this.button2_copyToLeft.Location = new System.Drawing.Point(276, 68);
             this.button2_copyToLeft.Name = "button2_copyToLeft";
             this.button2_copyToLeft.Size = new System.Drawing.Size(105, 23);
             this.button2_copyToLeft.TabIndex = 20;
@@ -483,7 +533,7 @@
             // button2_delete
             // 
             this.button2_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_delete.Location = new System.Drawing.Point(284, 92);
+            this.button2_delete.Location = new System.Drawing.Point(276, 92);
             this.button2_delete.Name = "button2_delete";
             this.button2_delete.Size = new System.Drawing.Size(105, 23);
             this.button2_delete.TabIndex = 18;
@@ -516,45 +566,45 @@
             // listView2
             // 
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader6,
             this.columnHeader7,
             this.columnHeader8,
             this.columnHeader9,
-            this.columnHeader10});
+            this.columnHeader10,
+            this.columnHeader11,
+            this.columnHeader12});
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView2.FullRowSelect = true;
             this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(395, 394);
+            this.listView2.Size = new System.Drawing.Size(387, 394);
             this.listView2.TabIndex = 17;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
             // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Имя";
-            this.columnHeader6.Width = 80;
-            // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "Тип";
-            this.columnHeader7.Width = 80;
+            this.columnHeader7.Text = "Имя";
+            this.columnHeader7.Width = 100;
             // 
             // columnHeader8
             // 
-            this.columnHeader8.Text = "Размер";
-            this.columnHeader8.Width = 80;
+            this.columnHeader8.Text = "Тип";
+            this.columnHeader8.Width = 50;
             // 
             // columnHeader9
             // 
-            this.columnHeader9.Text = "Дата созд.";
-            this.columnHeader9.Width = 80;
+            this.columnHeader9.Text = "Размер";
             // 
             // columnHeader10
             // 
-            this.columnHeader10.Text = "Дата изм.";
+            this.columnHeader10.Text = "Дата созд.";
             this.columnHeader10.Width = 80;
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "Дата изм.";
+            this.columnHeader11.Width = 80;
             // 
             // statusStrip2
             // 
@@ -567,7 +617,7 @@
             this.toolStripStatusLabel2_attr});
             this.statusStrip2.Location = new System.Drawing.Point(0, 582);
             this.statusStrip2.Name = "statusStrip2";
-            this.statusStrip2.Size = new System.Drawing.Size(395, 24);
+            this.statusStrip2.Size = new System.Drawing.Size(387, 24);
             this.statusStrip2.SizingGrip = false;
             this.statusStrip2.TabIndex = 1;
             this.statusStrip2.Text = "Item info";
@@ -620,51 +670,94 @@
             this.toolStripStatusLabel2_attr.Text = "Атрибуты: –";
             this.toolStripStatusLabel2_attr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // button1_create
+            // radioButton1
             // 
-            this.button1_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_create.Location = new System.Drawing.Point(285, 116);
-            this.button1_create.Name = "button1_create";
-            this.button1_create.Size = new System.Drawing.Size(105, 23);
-            this.button1_create.TabIndex = 11;
-            this.button1_create.Text = "Создать";
-            this.button1_create.UseVisualStyleBackColor = true;
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(135, 87);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(53, 17);
+            this.radioButton1.TabIndex = 13;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Созд.";
+            this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // button2_create
+            // radioButton2
             // 
-            this.button2_create.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_create.Location = new System.Drawing.Point(284, 116);
-            this.button2_create.Name = "button2_create";
-            this.button2_create.Size = new System.Drawing.Size(105, 23);
-            this.button2_create.TabIndex = 21;
-            this.button2_create.Text = "Создать";
-            this.button2_create.UseVisualStyleBackColor = true;
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(191, 87);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(50, 17);
+            this.radioButton2.TabIndex = 14;
+            this.radioButton2.Text = "Изм.";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // checkBox1_dateFilterCheck
+            // radioButton3
             // 
-            this.checkBox1_dateFilterCheck.AutoSize = true;
-            this.checkBox1_dateFilterCheck.Location = new System.Drawing.Point(9, 87);
-            this.checkBox1_dateFilterCheck.Name = "checkBox1_dateFilterCheck";
-            this.checkBox1_dateFilterCheck.Size = new System.Drawing.Size(115, 17);
-            this.checkBox1_dateFilterCheck.TabIndex = 12;
-            this.checkBox1_dateFilterCheck.Text = "Фильтр по датам";
-            this.checkBox1_dateFilterCheck.UseVisualStyleBackColor = true;
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(188, 86);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(50, 17);
+            this.radioButton3.TabIndex = 24;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Изм.";
+            this.radioButton3.UseVisualStyleBackColor = true;
             // 
-            // checkBox2_dateFilterCheck
+            // radioButton4
             // 
-            this.checkBox2_dateFilterCheck.AutoSize = true;
-            this.checkBox2_dateFilterCheck.Location = new System.Drawing.Point(6, 87);
-            this.checkBox2_dateFilterCheck.Name = "checkBox2_dateFilterCheck";
-            this.checkBox2_dateFilterCheck.Size = new System.Drawing.Size(115, 17);
-            this.checkBox2_dateFilterCheck.TabIndex = 22;
-            this.checkBox2_dateFilterCheck.Text = "Фильтр по датам";
-            this.checkBox2_dateFilterCheck.UseVisualStyleBackColor = true;
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(132, 86);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(53, 17);
+            this.radioButton4.TabIndex = 23;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "Созд.";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // columnHeader12
+            // 
+            this.columnHeader12.Text = "Директория";
+            this.columnHeader12.Width = 400;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Директория";
+            this.columnHeader6.Width = 400;
+            // 
+            // path1_TextBox
+            // 
+            this.path1_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.path1_TextBox.Location = new System.Drawing.Point(9, 16);
+            this.path1_TextBox.Name = "path1_TextBox";
+            this.path1_TextBox.Size = new System.Drawing.Size(246, 20);
+            this.path1_TextBox.TabIndex = 1;
+            // 
+            // button1_refresh
+            // 
+            this.button1_refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1_refresh.Location = new System.Drawing.Point(277, 13);
+            this.button1_refresh.Name = "button1_refresh";
+            this.button1_refresh.Size = new System.Drawing.Size(105, 23);
+            this.button1_refresh.TabIndex = 15;
+            this.button1_refresh.Text = "Обновить";
+            this.button1_refresh.UseVisualStyleBackColor = true;
+            // 
+            // button2_refresh
+            // 
+            this.button2_refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2_refresh.Location = new System.Drawing.Point(276, 14);
+            this.button2_refresh.Name = "button2_refresh";
+            this.button2_refresh.Size = new System.Drawing.Size(105, 23);
+            this.button2_refresh.TabIndex = 25;
+            this.button2_refresh.Text = "Обновить";
+            this.button2_refresh.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 610);
+            this.ClientSize = new System.Drawing.Size(784, 610);
             this.Controls.Add(this.splitContainer1);
             this.MinimumSize = new System.Drawing.Size(800, 480);
             this.Name = "Form1";
@@ -716,24 +809,24 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker1_from;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox search1_TextBox;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button1_search;
         private System.Windows.Forms.Button button1_moveToRight;
         private System.Windows.Forms.Button button1_copyToRight;
         private System.Windows.Forms.Button button1_delete;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListView listView2;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.StatusStrip statusStrip2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_name;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_size;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_dateChanged;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_dateCreated;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button2_search;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button2_moveToLeft;
         private System.Windows.Forms.ComboBox comboBox2_ext;
@@ -745,7 +838,6 @@
         private System.Windows.Forms.TextBox search2_TextBox;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.TextBox path1_TextBox;
         private System.Windows.Forms.TextBox path2_TextBox;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1_type;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2_type;
@@ -755,6 +847,15 @@
         private System.Windows.Forms.Button button2_create;
         private System.Windows.Forms.CheckBox checkBox1_dateFilterCheck;
         private System.Windows.Forms.CheckBox checkBox2_dateFilterCheck;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.ColumnHeader columnHeader12;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.TextBox path1_TextBox;
+        private System.Windows.Forms.Button button1_refresh;
+        private System.Windows.Forms.Button button2_refresh;
     }
 }
 
