@@ -117,25 +117,31 @@ namespace FileManager
 
             ClearStatusStrip();
 
-            /* РУЧНАЯ УСТАНОВКА СОБЫТИЙ НА ЭЛЕМЕНТЫ */
-            this.SearchTextbox.TextChanged += new System.EventHandler(this.SearchTextbox_TextChangedHandler);
-            this.PathTextbox.TextChanged += new System.EventHandler(this.PathTextbox_TextChangedHandler);
-            this.PathTextbox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PathTextbox_KeyUpHandler);
-            this.PathTextbox.Leave += new System.EventHandler(this.PathTextbox_LeaveHandler);
-            this.ExtensionsDropdown.SelectedValueChanged += new System.EventHandler(this.ExtensionDropdown_SelectedValueChanged);
-            this.FilesView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.FilesView_SelectionChangeHandler);
-            this.FilesView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FilesView_DoubleClickHandler);
-            this.StatusBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.StatusBar_MouseDoubleClick);
-            this.SearchButton.Click += new System.EventHandler(this.SearchButton_ClickHandler);
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_ClickHandler);
-            this.CreateButton.Click += new System.EventHandler(this.CreateButton_ClickHandler);
-            this.MoveButton.Click += new System.EventHandler(this.MoveButton_ClickHandler);
-            this.CopyButton.Click += new System.EventHandler(this.CopyButton_ClickHandler);
-            this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_ClickHandler);
-            this.DateFilter.CheckedChanged += new System.EventHandler(this.DateFilter_CheckHandler);
-            this.DateFrom.ValueChanged += new System.EventHandler(this.DateFrom_ChangedHandler);
-            this.DateTo.ValueChanged += new System.EventHandler(this.DateTo_ChangedHandler);
-            this.RadioDateCreated.CheckedChanged += new System.EventHandler(this.RadioDate_ChangedHandler);
+            /* РУЧНАЯ УСТАНОВКА ОБРАБОТЧИКОВ СОБЫТИЯ ЭЛЕМЕНТОВ*/
+            this.SearchTextbox.TextChanged += new EventHandler(SearchTextbox_TextChangedHandler);
+
+            this.PathTextbox.TextChanged += new EventHandler(PathTextbox_TextChangedHandler);
+            this.PathTextbox.KeyUp += new KeyEventHandler(PathTextbox_KeyUpHandler);
+            this.PathTextbox.Leave += new EventHandler(PathTextbox_LeaveHandler);
+
+            this.ExtensionsDropdown.SelectedValueChanged += new EventHandler(ExtensionDropdown_SelectedValueChanged);
+
+            this.FilesView.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(FilesView_SelectionChangeHandler);
+            this.FilesView.MouseDoubleClick += new MouseEventHandler(FilesView_DoubleClickHandler);
+
+            this.StatusBar.MouseDoubleClick += new MouseEventHandler(StatusBar_MouseDoubleClick);
+
+            this.SearchButton.Click += new EventHandler(SearchButton_ClickHandler);
+            this.DeleteButton.Click += new EventHandler(DeleteButton_ClickHandler);
+            this.CreateButton.Click += new EventHandler(CreateButton_ClickHandler);
+            this.MoveButton.Click += new EventHandler(MoveButton_ClickHandler);
+            this.CopyButton.Click += new EventHandler(CopyButton_ClickHandler);
+            this.RefreshButton.Click += new EventHandler(RefreshButton_ClickHandler);
+
+            this.DateFrom.ValueChanged += new EventHandler(DateFrom_ChangedHandler);
+            this.DateTo.ValueChanged += new EventHandler(DateTo_ChangedHandler);
+            this.DateFilter.CheckedChanged += new EventHandler(DateFilter_CheckHandler);
+            this.RadioDateCreated.CheckedChanged += new EventHandler(RadioDate_ChangedHandler);
         }
 
         /* Функция очистки нижней статусной строки */
@@ -580,7 +586,33 @@ namespace FileManager
                     }
                     else
                     {
+                        try
+                        {
 
+                            bool isFileBinary = Helpers.IsFileBinary(fileInfo.FullName);
+                            if (isFileBinary)
+                            {
+                                MessageBox.Show("Выбранный файл не является текстовым", "Некорректный тип файла", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                            else
+                            {
+                                using (EditTextForm form = new EditTextForm(fileInfo))
+                                {
+                                    DialogResult dr = form.ShowDialog();
+
+                                    if (dr == DialogResult.OK)
+                                    {
+                                        FullRerender();
+                                    }
+
+                                    form.Dispose();
+                                }
+                            }
+                        }
+                        catch (Exception error)
+                        {
+                            MessageBox.Show(error.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
@@ -718,7 +750,17 @@ namespace FileManager
         /* Обработчик нажатия на кнопку создания */
         private void CreateButton_ClickHandler(object sender, EventArgs e)
         {
-            // TODO: создание файлов
+            using (CreateForm form = new CreateForm(currentPath))
+            {
+                DialogResult dr = form.ShowDialog();
+
+                if (dr == DialogResult.OK)
+                {
+                    FullRerender();
+                }
+
+                form.Dispose();
+            }
         }
 
         /* Обработчик нажатия на кнопку перемещения */
@@ -810,18 +852,18 @@ namespace FileManager
                         {
                             DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
 
+                            Directory.CreateDirectory(AnotherController.currentPath + @"\" + directoryInfo.Name);
+
                             // Создать идентичную структуру папок
                             foreach (string dirPath in Directory.GetDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories))
                             {
-
-                                Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, AnotherController.currentPath));
-
+                                Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, AnotherController.currentPath + @"\" + directoryInfo.Name));
                             }
 
                             // Копировать все файлы и перезаписать файлы с идентичным именем
                             foreach (string newPath in Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
                             {
-                                File.Copy(newPath, newPath.Replace(directoryInfo.FullName, AnotherController.currentPath), true);
+                                File.Copy(newPath, newPath.Replace(directoryInfo.FullName, AnotherController.currentPath + @"\" + directoryInfo.Name), true);
                             }
 
                             FullRerender();
