@@ -8,12 +8,13 @@ using System.Windows.Forms;
 
 namespace FileManager
 {
+    /* Класс для сохранения дополнительной информации в элементах списка файлов */
     public class ListViewItemWithData : ListViewItem
     {
-        private FileInfo fileData;
-        private DirectoryInfo folderData;
+        private FileInfo fileData; // информация о файле (если это файл)
+        private DirectoryInfo folderData; // информация о папке (если это папка)
 
-        public ListItemType Type;
+        public ListItemType Type; // информация о типе – папка, файл или кнопка назад в списке
 
         public ListViewItemWithData()
         {
@@ -34,6 +35,8 @@ namespace FileManager
             this.Type = ListItemType.Folder;
         }
 
+        /* Метод для получения дополнительной информации в зависимости от контекста */
+        /* требует явного приведения, например: DirectoryInfo d = (DirectoryInfo)item.GetData(); */
         public object GetData()
         {
             if (this.Type == ListItemType.File)

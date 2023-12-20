@@ -10,8 +10,21 @@ using System.Windows.Forms;
 
 namespace FileManager
 {
+    /* Контроллер управляет необходимыми элементами управления основной формы */
     internal class FileManagerController
     {
+        private Form1 mainForm;
+        private FileManagerController anotherController;
+
+        private TableLayoutSettings tableLayoutSettings;
+        private string currentPath;
+
+        private Task currentTask;
+        private CancellationTokenSource cancelTokenSource;
+
+        private bool isSearchMode = false;
+
+        /* Блок описания всех элементов контроллера*/
         public TextBox PathTextbox;
         public ComboBox ExtensionsDropdown;
         public DateTimePicker DateFrom;
@@ -37,16 +50,9 @@ namespace FileManager
         public List<string> ExtensionsList;
         public List<ListViewItemWithData> FilesList;
 
-        private Form1 mainForm;
-        private FileManagerController anotherController;
-
-        public FileManagerController AnotherController
+        public FileManagerController AnotherController // привязка одного контроллера к другому
         {
-            get
-            {
-                return anotherController;
-            }
-
+            get { return anotherController; }
             set
             {
                 anotherController = value;
@@ -54,20 +60,14 @@ namespace FileManager
             }
         }
 
-        public bool IsSearchMode
+        public bool IsSearchMode // активирован ли режим поиска
         {
             get { return isSearchMode; }
             set { isSearchMode = value; }
         }
 
-        private TableLayoutSettings tableLayoutSettings;
-        private string currentPath;
-
-        private Task currentTask;
-        private CancellationTokenSource cancelTokenSource;
-
-        private bool isSearchMode = false;
-
+        /* Иницилизирующий конструктор контроллера */
+        /* принимает все нужные элементы формы и производит начальную конфигурацию */
         public FileManagerController(
             Form1 mainForm,
             TextBox pathTextbox,
@@ -117,16 +117,14 @@ namespace FileManager
 
             ClearStatusStrip();
 
+            /* РУЧНАЯ УСТАНОВКА СОБЫТИЙ НА ЭЛЕМЕНТЫ */
             this.SearchTextbox.TextChanged += new System.EventHandler(this.SearchTextbox_TextChangedHandler);
             this.PathTextbox.TextChanged += new System.EventHandler(this.PathTextbox_TextChangedHandler);
             this.PathTextbox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PathTextbox_KeyUpHandler);
             this.PathTextbox.Leave += new System.EventHandler(this.PathTextbox_LeaveHandler);
-
             this.ExtensionsDropdown.SelectedValueChanged += new System.EventHandler(this.ExtensionDropdown_SelectedValueChanged);
-
             this.FilesView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.FilesView_SelectionChangeHandler);
             this.FilesView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FilesView_DoubleClickHandler);
-
             this.StatusBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.StatusBar_MouseDoubleClick);
             this.SearchButton.Click += new System.EventHandler(this.SearchButton_ClickHandler);
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_ClickHandler);
@@ -140,6 +138,7 @@ namespace FileManager
             this.RadioDateCreated.CheckedChanged += new System.EventHandler(this.RadioDate_ChangedHandler);
         }
 
+        /* Функция очистки нижней статусной строки */
         private void ClearStatusStrip()
         {
             StatusName.Text = "Имя: –";
@@ -150,16 +149,19 @@ namespace FileManager
             StatusAttr.Text = "Атрибуты: –";
         }
 
+        /* Функция очистки листа типов файлов */
         private void ClearExtensionsList()
         {
             ExtensionsList.Clear();
         }
 
+        /* Функция очистки скрытого списка файлов */
         private void ClearFilesList()
         {
             FilesList.Clear();
         }
 
+        /* Функция заполнения выпадающего списка найденными типами файлов */
         private void FillExtensionsDropdown()
         {
             ExtensionsDropdown.Items.Clear();
@@ -172,6 +174,8 @@ namespace FileManager
             ExtensionsDropdown.SelectedIndex = 0;
         }
 
+        /* Функция для проверки возможности копирования и перемещения файлов */
+        /* Блокирует кнопки, если копирование/перемещение запрещено */
         private void ComparePaths(string path = "")
         {
             string curPath = currentPath;
@@ -198,6 +202,7 @@ namespace FileManager
 
         }
 
+        /* Функция проверки количества выбранных строк в списке файлов */
         public void CheckFilesSelection()
         {
             if (FilesView.SelectedItems.Count == 0)
@@ -208,6 +213,7 @@ namespace FileManager
             }
         }
 
+        /* Функция перерисовки списка файлов + фильтрация по типу и датам */
         public void RenderList()
         {
             FilesView.Items.Clear();
@@ -258,6 +264,7 @@ namespace FileManager
             }
         }
 
+        /* Функция для полной перерисовки обоих списков файлов (даже в режиме поиска) */
         public void FullRerender(bool isCaller = true)
         {
             if (isSearchMode)
@@ -271,6 +278,9 @@ namespace FileManager
 
             if (isCaller) AnotherController.FullRerender(false);
         }
+
+        /* Функция для получения списка файлов и папок */
+        /* (в режиме поиска выполняется рекурсивно) */
         private void GetFolderFiles(string path, bool isAddBackward = false)
         {
             bool dirSuccess = false;
@@ -325,7 +335,7 @@ namespace FileManager
                         {
                             FilesList.Add(listViewItem);
                         }
-                        GetFolderFiles(item.FullName);
+                        GetFolderFiles(item.FullName); // момент рекурсии
                     }
                     else
                     {
@@ -382,7 +392,8 @@ namespace FileManager
             }
         }
 
-        private void OpenFolder(string path, bool isRefresh = false)
+        /* Функция для открытия папки с обновлением информации о типах */
+        private void OpenFolder(string path)
         {
             try
             {
@@ -390,7 +401,7 @@ namespace FileManager
                 DirectoryInfo[] dir = info.GetDirectories();
                 ClearStatusStrip();
 
-                if (!isRefresh) ClearExtensionsList();
+                ClearExtensionsList();
 
                 if (!info.Exists) throw new ArgumentNullException("info");
 
@@ -403,7 +414,7 @@ namespace FileManager
 
                 CreateButton.Enabled = true;
 
-                if (!isRefresh) FillExtensionsDropdown();
+                FillExtensionsDropdown();
 
                 RenderList();
                 ComparePaths();
@@ -414,6 +425,8 @@ namespace FileManager
             }
         }
 
+        /* Функция для активации режим поиска по ключевому слову */
+        /* (может занимать много времени из-за рекурсивного обхода) */
         private void SearchByKeyword()
         {
             mainForm.Cursor = Cursors.WaitCursor;
@@ -431,10 +444,12 @@ namespace FileManager
             mainForm.Enabled = true;
         }
 
+        /* Обработчик смены выбранного файла в списке файлов */
         private void FilesView_SelectionChangeHandler(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             ListViewItemWithData item = (ListViewItemWithData)e.Item;
 
+            /* Проверка на наличие асинхронной задачи на расчёт размера папки */
             if (currentTask != null)
             {
                 try
@@ -453,7 +468,7 @@ namespace FileManager
                 cancelTokenSource = null;
             }
 
-
+            /* Если подходящего выбранного элемента нет, вырубаем кнопки для файлов */
             if (FilesView.SelectedItems.Count < 1 || item.Type == ListItemType.None || item.Type == ListItemType.Backward)
             {
                 ClearStatusStrip();
@@ -465,29 +480,37 @@ namespace FileManager
             }
             DeleteButton.Enabled = true;
 
+            /* Если выбран ровно один файл/папка, отобразить информацию о нём в нижней строке */
             if (FilesView.SelectedItems.Count == 1)
             {
+                /* логика для папки */
                 if (item.Type == ListItemType.Folder)
                 {
                     DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
                     ComparePaths(directoryInfo.Parent.FullName);
                     StatusName.Text = "Имя: " + directoryInfo.Name;
                     StatusType.Text = "Тип: " + "Папка";
-                    StatusSize.Text = "Размер: " + "загрузка...";
+                    StatusSize.Text = "Размер: " + "загрузка..."; // Размер папки вычисляется долго, потому заглушка
                     StatusCreated.Text = "Создан: " + directoryInfo.CreationTime.ToString();
                     StatusChanged.Text = "Изменён: " + directoryInfo.LastWriteTime.ToString();
                     StatusAttr.Text = "Атрибуты: " + directoryInfo.Attributes.ToString();
 
+                    // Создаём асинхронную задачу на вычисление размера папки
                     cancelTokenSource = new CancellationTokenSource();
                     currentTask = Task.Run(() =>
                     {
-                        if (cancelTokenSource.Token.IsCancellationRequested)
-                            cancelTokenSource.Token.ThrowIfCancellationRequested(); // генерируем исключение
+                        try
+                        {
+                            if (cancelTokenSource.Token.IsCancellationRequested)
+                                cancelTokenSource.Token.ThrowIfCancellationRequested(); // генерируем исключение
 
-                        StatusSize.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSource.Token));
+                            StatusSize.Text = "Размер: " + Helpers.ToFileSize(Helpers.DirSize(directoryInfo, cancelTokenSource.Token));
+                        }
+                        catch { }
                     }, cancelTokenSource.Token);
                 }
 
+                /* логика для файла */
                 if (item.Type == ListItemType.File)
                 {
                     FileInfo fileInfo = (FileInfo)item.GetData();
@@ -504,11 +527,13 @@ namespace FileManager
             else { ClearStatusStrip(); }
         }
 
+        /* Обработчик двойного клика по файлу */
         private void FilesView_DoubleClickHandler(object sender, MouseEventArgs e)
         {
             string nextPath = currentPath;
             ListViewItemWithData item = (ListViewItemWithData)FilesView.SelectedItems[0];
 
+            /* Если кликаем по "назад", перемещаемся на уровень выше */
             if (item.Text == @"\..")
             {
                 int lastSlashIdx = nextPath.LastIndexOf(@"\");
@@ -524,7 +549,7 @@ namespace FileManager
                     OpenFolder(nextPath);
                 }
             }
-            else
+            else // иначе переходим в выбранную папку
             {
                 if (!nextPath.EndsWith(@":\")) nextPath += @"\";
 
@@ -561,9 +586,7 @@ namespace FileManager
             }
         }
 
-
-
-
+        /* Обработчик окончания редактирования адресной строки сверху */
         private void PathTextbox_LeaveHandler(object sender, EventArgs e)
         {
             try
@@ -578,6 +601,7 @@ namespace FileManager
             }
         }
 
+        /* Обработчик нажатия на Enter для ручного ввода нового адреса сверху */
         private void PathTextbox_KeyUpHandler(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -587,6 +611,7 @@ namespace FileManager
             }
         }
 
+        /* Обработчик редактирования текста в адресной строке, заменяет слеши на обратные */
         private void PathTextbox_TextChangedHandler(object sender, EventArgs e)
         {
             TextBox textbox = sender as TextBox;
@@ -596,6 +621,7 @@ namespace FileManager
             textbox.SelectionLength = 0;
         }
 
+        /* Обработчик редактирования текста в строке поиска */
         private void SearchTextbox_TextChangedHandler(object sender, EventArgs e)
         {
             TextBox textbox = sender as TextBox;
@@ -609,6 +635,7 @@ namespace FileManager
             }
         }
 
+        /* Обработчик двойного клика по нижней строке для разворачивания */
         private void StatusBar_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             StatusStrip statusStrip = sender as StatusStrip;
@@ -626,11 +653,13 @@ namespace FileManager
             statusStrip.PerformLayout();
         }
 
+        /* Обработчик изменения выбранного типа файла (перерисовка + фильтрация листа файлов) */
         private void ExtensionDropdown_SelectedValueChanged(object sender, EventArgs e)
         {
             RenderList();
         }
 
+        /* Обработчик нажатия на кнопку удаления */
         private void DeleteButton_ClickHandler(object sender, EventArgs e)
         {
             try
@@ -686,11 +715,13 @@ namespace FileManager
             }
         }
 
+        /* Обработчик нажатия на кнопку создания */
         private void CreateButton_ClickHandler(object sender, EventArgs e)
         {
             // TODO: создание файлов
         }
 
+        /* Обработчик нажатия на кнопку перемещения */
         private void MoveButton_ClickHandler(object sender, EventArgs e)
         {
             try
@@ -745,6 +776,7 @@ namespace FileManager
             }
         }
 
+        /* Обработчик нажатия на кнопку копирования */
         private void CopyButton_ClickHandler(object sender, EventArgs e)
         {
             try
@@ -778,18 +810,18 @@ namespace FileManager
                         {
                             DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
 
-                            //Создать идентичную структуру папок
+                            // Создать идентичную структуру папок
                             foreach (string dirPath in Directory.GetDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories))
                             {
 
-                                    Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, AnotherController.currentPath));
+                                Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, AnotherController.currentPath));
 
                             }
 
-                            //Копировать все файлы и перезаписать файлы с идентичным именем
+                            // Копировать все файлы и перезаписать файлы с идентичным именем
                             foreach (string newPath in Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
                             {
-                                    File.Copy(newPath, newPath.Replace(directoryInfo.FullName, AnotherController.currentPath), true);
+                                File.Copy(newPath, newPath.Replace(directoryInfo.FullName, AnotherController.currentPath), true);
                             }
 
                             FullRerender();
@@ -813,6 +845,7 @@ namespace FileManager
             }
         }
 
+        /* Обработчик нажатия на кнопку обновления */
         private void RefreshButton_ClickHandler(object sender, EventArgs e)
         {
             if (!isSearchMode)
@@ -821,6 +854,7 @@ namespace FileManager
             }
         }
 
+        /* Функция для выключения режима поиска */
         private void CancelSearchMode()
         {
             isSearchMode = false;
@@ -834,6 +868,7 @@ namespace FileManager
             OpenFolder(currentPath);
         }
 
+        /* Обработчик нажатия на кнопку поиска */
         private void SearchButton_ClickHandler(object sender, EventArgs e)
         {
             if (!isSearchMode)
@@ -854,11 +889,13 @@ namespace FileManager
             }
         }
 
+        /* Обработчик включения/выключения фильтрации по датам */
         private void DateFilter_CheckHandler(object sender, EventArgs e)
         {
             RenderList();
         }
 
+        /* Обработчик изменения значения начальной даты (левая) */
         private void DateFrom_ChangedHandler(object sender, EventArgs e)
         {
             try
@@ -873,6 +910,7 @@ namespace FileManager
             catch { }
         }
 
+        /* Обработчик изменения значения конечной даты (правая) */
         private void DateTo_ChangedHandler(object sender, EventArgs e)
         {
             try
@@ -887,6 +925,7 @@ namespace FileManager
             catch { }
         }
 
+        /* Обработчик выбора режима фильтрации по дате (дата создания / дата изменения) */
         private void RadioDate_ChangedHandler(object sender, EventArgs e)
         {
             if (DateFilter.Checked) RenderList();

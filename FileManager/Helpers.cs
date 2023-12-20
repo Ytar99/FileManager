@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace FileManager
 {
+    /* Класс с полезными функциями */
     public class Helpers
     {
+        /* Функция рекурсивно вычисляет размер папки */
         public static long DirSize(DirectoryInfo d)
         {
             long Size = 0;
 
             try
             {
-                // Add file sizes.
                 FileInfo[] fis = d.GetFiles();
                 foreach (FileInfo fi in fis)
                 {
                     Size += fi.Length;
                 }
 
-                // Add subdirectory sizes.
                 DirectoryInfo[] dis = d.GetDirectories();
                 foreach (DirectoryInfo di in dis)
                 {
@@ -37,6 +37,7 @@ namespace FileManager
             return Size;
         }
 
+        /* Перегрузка предыдущей функции с возможностью отмены асинхронной задачи по токену */
         public static long DirSize(DirectoryInfo d, CancellationToken token)
         {
             if (token.IsCancellationRequested)
@@ -50,14 +51,12 @@ namespace FileManager
 
             try
             {
-                // Add file sizes.
                 FileInfo[] fis = d.GetFiles();
                 foreach (FileInfo fi in fis)
                 {
                     Size += fi.Length;
                 }
 
-                // Add subdirectory sizes.
                 DirectoryInfo[] dis = d.GetDirectories();
                 foreach (DirectoryInfo di in dis)
                 {
@@ -70,25 +69,27 @@ namespace FileManager
             return Size;
         }
 
+        /* Функция для вычисления форматированной строки размера файла/папки */
         private static string ThreeNonZeroDigits(double value)
         {
             if (value >= 100)
             {
-                // No digits after the decimal.
+                // Нет цифр в дробной части
                 return value.ToString("0,0");
             }
             else if (value >= 10)
             {
-                // One digit after the decimal.
+                // Одна цифра в дробной части
                 return value.ToString("0.0");
             }
             else
             {
-                // Two digits after the decimal.
+                // Две цифры в дробной части
                 return value.ToString("0.00");
             }
         }
 
+        /* Функция для вычисления понятного значения размера файла/папки */
         public static string ToFileSize(double value)
         {
             string[] suffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};

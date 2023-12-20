@@ -6,17 +6,12 @@ using System.Threading.Tasks;
 
 namespace FileManager
 {
-    public enum Side
-    {
-        Left,
-        Right,
-    }
-
+    /* Перечисление типов для элементов списка файлов */
     public enum ListItemType
     {
-        None,
-        Backward,
-        File,
-        Folder,
+        None,       // заглушка
+        Backward,   // кнопка назад
+        File,       // файл
+        Folder,     // папка
     }
 }

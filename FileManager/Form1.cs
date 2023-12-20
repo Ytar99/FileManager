@@ -24,6 +24,7 @@ namespace FileManager
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            /* Создаём контроллей левой панели */
             controllerLeft = new FileManagerController(
                 this,
                 path1_TextBox,
@@ -44,6 +45,7 @@ namespace FileManager
                 statusStrip1
                 );
 
+            /* Создаём контроллей правой панели */
             controllerRight = new FileManagerController(
                 this,
                 path2_TextBox,
@@ -64,6 +66,7 @@ namespace FileManager
                 statusStrip2
                 );
 
+            /* Связываем контроллеры между собой */
             controllerLeft.AnotherController = controllerRight;
             controllerRight.AnotherController = controllerLeft;
         }
