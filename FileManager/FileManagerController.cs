@@ -533,6 +533,7 @@ namespace FileManager
                 DeleteButton.Enabled = false;
                 CopyButton.Enabled = false;
                 MoveButton.Enabled = false;
+                ZipButton.Enabled = false;
 
                 return;
             }
