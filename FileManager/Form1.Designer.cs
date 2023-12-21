@@ -31,8 +31,12 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1_refresh = new System.Windows.Forms.Button();
+            this.radioButton1_dateChanged = new System.Windows.Forms.RadioButton();
+            this.radioButton1_dateCreated = new System.Windows.Forms.RadioButton();
             this.checkBox1_dateFilterCheck = new System.Windows.Forms.CheckBox();
             this.button1_create = new System.Windows.Forms.Button();
+            this.path1_TextBox = new System.Windows.Forms.TextBox();
             this.button1_search = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.button1_moveToRight = new System.Windows.Forms.Button();
@@ -49,6 +53,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1_name = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1_type = new System.Windows.Forms.ToolStripStatusLabel();
@@ -58,6 +63,9 @@
             this.toolStripStatusLabel1_attr = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button2_refresh = new System.Windows.Forms.Button();
+            this.radioButton2_dateChanged = new System.Windows.Forms.RadioButton();
+            this.radioButton2_dateCreated = new System.Windows.Forms.RadioButton();
             this.checkBox2_dateFilterCheck = new System.Windows.Forms.CheckBox();
             this.button2_create = new System.Windows.Forms.Button();
             this.path2_TextBox = new System.Windows.Forms.TextBox();
@@ -77,6 +85,7 @@
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2_name = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_type = new System.Windows.Forms.ToolStripStatusLabel();
@@ -84,15 +93,10 @@
             this.toolStripStatusLabel2_dateCreated = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_dateChanged = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2_attr = new System.Windows.Forms.ToolStripStatusLabel();
-            this.radioButton1_dateCreated = new System.Windows.Forms.RadioButton();
-            this.radioButton1_dateChanged = new System.Windows.Forms.RadioButton();
-            this.radioButton2_dateChanged = new System.Windows.Forms.RadioButton();
-            this.radioButton2_dateCreated = new System.Windows.Forms.RadioButton();
-            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.path1_TextBox = new System.Windows.Forms.TextBox();
-            this.button1_refresh = new System.Windows.Forms.Button();
-            this.button2_refresh = new System.Windows.Forms.Button();
+            this.button1_zip = new System.Windows.Forms.Button();
+            this.button1_unzip = new System.Windows.Forms.Button();
+            this.button2_unzip = new System.Windows.Forms.Button();
+            this.button2_zip = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -150,12 +154,14 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.listView1);
             this.splitContainer2.Size = new System.Drawing.Size(385, 582);
-            this.splitContainer2.SplitterDistance = 184;
+            this.splitContainer2.SplitterDistance = 192;
             this.splitContainer2.TabIndex = 1;
             this.splitContainer2.TabStop = false;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1_unzip);
+            this.groupBox1.Controls.Add(this.button1_zip);
             this.groupBox1.Controls.Add(this.button1_refresh);
             this.groupBox1.Controls.Add(this.radioButton1_dateChanged);
             this.groupBox1.Controls.Add(this.radioButton1_dateCreated);
@@ -175,10 +181,42 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(385, 184);
+            this.groupBox1.Size = new System.Drawing.Size(385, 192);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Первая директория";
+            // 
+            // button1_refresh
+            // 
+            this.button1_refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1_refresh.Location = new System.Drawing.Point(277, 13);
+            this.button1_refresh.Name = "button1_refresh";
+            this.button1_refresh.Size = new System.Drawing.Size(105, 23);
+            this.button1_refresh.TabIndex = 15;
+            this.button1_refresh.Text = "Обновить";
+            this.button1_refresh.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1_dateChanged
+            // 
+            this.radioButton1_dateChanged.AutoSize = true;
+            this.radioButton1_dateChanged.Location = new System.Drawing.Point(191, 87);
+            this.radioButton1_dateChanged.Name = "radioButton1_dateChanged";
+            this.radioButton1_dateChanged.Size = new System.Drawing.Size(50, 17);
+            this.radioButton1_dateChanged.TabIndex = 14;
+            this.radioButton1_dateChanged.Text = "Изм.";
+            this.radioButton1_dateChanged.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1_dateCreated
+            // 
+            this.radioButton1_dateCreated.AutoSize = true;
+            this.radioButton1_dateCreated.Checked = true;
+            this.radioButton1_dateCreated.Location = new System.Drawing.Point(135, 87);
+            this.radioButton1_dateCreated.Name = "radioButton1_dateCreated";
+            this.radioButton1_dateCreated.Size = new System.Drawing.Size(53, 17);
+            this.radioButton1_dateCreated.TabIndex = 13;
+            this.radioButton1_dateCreated.TabStop = true;
+            this.radioButton1_dateCreated.Text = "Созд.";
+            this.radioButton1_dateCreated.UseVisualStyleBackColor = true;
             // 
             // checkBox1_dateFilterCheck
             // 
@@ -200,6 +238,15 @@
             this.button1_create.TabIndex = 11;
             this.button1_create.Text = "Создать";
             this.button1_create.UseVisualStyleBackColor = true;
+            // 
+            // path1_TextBox
+            // 
+            this.path1_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.path1_TextBox.Location = new System.Drawing.Point(9, 16);
+            this.path1_TextBox.Name = "path1_TextBox";
+            this.path1_TextBox.Size = new System.Drawing.Size(246, 20);
+            this.path1_TextBox.TabIndex = 1;
             // 
             // button1_search
             // 
@@ -305,7 +352,7 @@
             this.listView1.LabelWrap = false;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(385, 394);
+            this.listView1.Size = new System.Drawing.Size(385, 386);
             this.listView1.TabIndex = 7;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -333,6 +380,11 @@
             // 
             this.columnHeader5.Text = "Дата изм.";
             this.columnHeader5.Width = 80;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Директория";
+            this.columnHeader6.Width = 400;
             // 
             // statusStrip1
             // 
@@ -415,12 +467,14 @@
             // 
             this.splitContainer3.Panel2.Controls.Add(this.listView2);
             this.splitContainer3.Size = new System.Drawing.Size(387, 582);
-            this.splitContainer3.SplitterDistance = 184;
+            this.splitContainer3.SplitterDistance = 192;
             this.splitContainer3.TabIndex = 2;
             this.splitContainer3.TabStop = false;
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button2_unzip);
+            this.groupBox2.Controls.Add(this.button2_zip);
             this.groupBox2.Controls.Add(this.button2_refresh);
             this.groupBox2.Controls.Add(this.radioButton2_dateChanged);
             this.groupBox2.Controls.Add(this.radioButton2_dateCreated);
@@ -440,10 +494,42 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(387, 184);
+            this.groupBox2.Size = new System.Drawing.Size(387, 192);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Вторая директория";
+            // 
+            // button2_refresh
+            // 
+            this.button2_refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2_refresh.Location = new System.Drawing.Point(276, 14);
+            this.button2_refresh.Name = "button2_refresh";
+            this.button2_refresh.Size = new System.Drawing.Size(105, 23);
+            this.button2_refresh.TabIndex = 25;
+            this.button2_refresh.Text = "Обновить";
+            this.button2_refresh.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2_dateChanged
+            // 
+            this.radioButton2_dateChanged.AutoSize = true;
+            this.radioButton2_dateChanged.Location = new System.Drawing.Point(188, 86);
+            this.radioButton2_dateChanged.Name = "radioButton2_dateChanged";
+            this.radioButton2_dateChanged.Size = new System.Drawing.Size(50, 17);
+            this.radioButton2_dateChanged.TabIndex = 24;
+            this.radioButton2_dateChanged.Text = "Изм.";
+            this.radioButton2_dateChanged.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2_dateCreated
+            // 
+            this.radioButton2_dateCreated.AutoSize = true;
+            this.radioButton2_dateCreated.Checked = true;
+            this.radioButton2_dateCreated.Location = new System.Drawing.Point(132, 86);
+            this.radioButton2_dateCreated.Name = "radioButton2_dateCreated";
+            this.radioButton2_dateCreated.Size = new System.Drawing.Size(53, 17);
+            this.radioButton2_dateCreated.TabIndex = 23;
+            this.radioButton2_dateCreated.TabStop = true;
+            this.radioButton2_dateCreated.Text = "Созд.";
+            this.radioButton2_dateCreated.UseVisualStyleBackColor = true;
             // 
             // checkBox2_dateFilterCheck
             // 
@@ -577,7 +663,7 @@
             this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(387, 394);
+            this.listView2.Size = new System.Drawing.Size(387, 386);
             this.listView2.TabIndex = 17;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -605,6 +691,11 @@
             // 
             this.columnHeader11.Text = "Дата изм.";
             this.columnHeader11.Width = 80;
+            // 
+            // columnHeader12
+            // 
+            this.columnHeader12.Text = "Директория";
+            this.columnHeader12.Width = 400;
             // 
             // statusStrip2
             // 
@@ -670,88 +761,49 @@
             this.toolStripStatusLabel2_attr.Text = "Атрибуты: –";
             this.toolStripStatusLabel2_attr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // radioButton1_dateCreated
+            // button1_zip
             // 
-            this.radioButton1_dateCreated.AutoSize = true;
-            this.radioButton1_dateCreated.Checked = true;
-            this.radioButton1_dateCreated.Location = new System.Drawing.Point(135, 87);
-            this.radioButton1_dateCreated.Name = "radioButton1_dateCreated";
-            this.radioButton1_dateCreated.Size = new System.Drawing.Size(53, 17);
-            this.radioButton1_dateCreated.TabIndex = 13;
-            this.radioButton1_dateCreated.TabStop = true;
-            this.radioButton1_dateCreated.Text = "Созд.";
-            this.radioButton1_dateCreated.UseVisualStyleBackColor = true;
+            this.button1_zip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1_zip.Enabled = false;
+            this.button1_zip.Location = new System.Drawing.Point(277, 145);
+            this.button1_zip.Name = "button1_zip";
+            this.button1_zip.Size = new System.Drawing.Size(105, 23);
+            this.button1_zip.TabIndex = 16;
+            this.button1_zip.Text = "Создать архив";
+            this.button1_zip.UseVisualStyleBackColor = true;
             // 
-            // radioButton1_dateChanged
+            // button1_unzip
             // 
-            this.radioButton1_dateChanged.AutoSize = true;
-            this.radioButton1_dateChanged.Location = new System.Drawing.Point(191, 87);
-            this.radioButton1_dateChanged.Name = "radioButton1_dateChanged";
-            this.radioButton1_dateChanged.Size = new System.Drawing.Size(50, 17);
-            this.radioButton1_dateChanged.TabIndex = 14;
-            this.radioButton1_dateChanged.Text = "Изм.";
-            this.radioButton1_dateChanged.UseVisualStyleBackColor = true;
+            this.button1_unzip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1_unzip.Enabled = false;
+            this.button1_unzip.Location = new System.Drawing.Point(277, 169);
+            this.button1_unzip.Name = "button1_unzip";
+            this.button1_unzip.Size = new System.Drawing.Size(105, 23);
+            this.button1_unzip.TabIndex = 17;
+            this.button1_unzip.Text = "Извлечь архив";
+            this.button1_unzip.UseVisualStyleBackColor = true;
             // 
-            // radioButton2_dateChanged
+            // button2_unzip
             // 
-            this.radioButton2_dateChanged.AutoSize = true;
-            this.radioButton2_dateChanged.Location = new System.Drawing.Point(188, 86);
-            this.radioButton2_dateChanged.Name = "radioButton2_dateChanged";
-            this.radioButton2_dateChanged.Size = new System.Drawing.Size(50, 17);
-            this.radioButton2_dateChanged.TabIndex = 24;
-            this.radioButton2_dateChanged.Text = "Изм.";
-            this.radioButton2_dateChanged.UseVisualStyleBackColor = true;
+            this.button2_unzip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2_unzip.Enabled = false;
+            this.button2_unzip.Location = new System.Drawing.Point(276, 169);
+            this.button2_unzip.Name = "button2_unzip";
+            this.button2_unzip.Size = new System.Drawing.Size(105, 23);
+            this.button2_unzip.TabIndex = 27;
+            this.button2_unzip.Text = "Извлечь архив";
+            this.button2_unzip.UseVisualStyleBackColor = true;
             // 
-            // radioButton2_dateCreated
+            // button2_zip
             // 
-            this.radioButton2_dateCreated.AutoSize = true;
-            this.radioButton2_dateCreated.Checked = true;
-            this.radioButton2_dateCreated.Location = new System.Drawing.Point(132, 86);
-            this.radioButton2_dateCreated.Name = "radioButton2_dateCreated";
-            this.radioButton2_dateCreated.Size = new System.Drawing.Size(53, 17);
-            this.radioButton2_dateCreated.TabIndex = 23;
-            this.radioButton2_dateCreated.TabStop = true;
-            this.radioButton2_dateCreated.Text = "Созд.";
-            this.radioButton2_dateCreated.UseVisualStyleBackColor = true;
-            // 
-            // columnHeader12
-            // 
-            this.columnHeader12.Text = "Директория";
-            this.columnHeader12.Width = 400;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Директория";
-            this.columnHeader6.Width = 400;
-            // 
-            // path1_TextBox
-            // 
-            this.path1_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.path1_TextBox.Location = new System.Drawing.Point(9, 16);
-            this.path1_TextBox.Name = "path1_TextBox";
-            this.path1_TextBox.Size = new System.Drawing.Size(246, 20);
-            this.path1_TextBox.TabIndex = 1;
-            // 
-            // button1_refresh
-            // 
-            this.button1_refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_refresh.Location = new System.Drawing.Point(277, 13);
-            this.button1_refresh.Name = "button1_refresh";
-            this.button1_refresh.Size = new System.Drawing.Size(105, 23);
-            this.button1_refresh.TabIndex = 15;
-            this.button1_refresh.Text = "Обновить";
-            this.button1_refresh.UseVisualStyleBackColor = true;
-            // 
-            // button2_refresh
-            // 
-            this.button2_refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2_refresh.Location = new System.Drawing.Point(276, 14);
-            this.button2_refresh.Name = "button2_refresh";
-            this.button2_refresh.Size = new System.Drawing.Size(105, 23);
-            this.button2_refresh.TabIndex = 25;
-            this.button2_refresh.Text = "Обновить";
-            this.button2_refresh.UseVisualStyleBackColor = true;
+            this.button2_zip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2_zip.Enabled = false;
+            this.button2_zip.Location = new System.Drawing.Point(276, 145);
+            this.button2_zip.Name = "button2_zip";
+            this.button2_zip.Size = new System.Drawing.Size(105, 23);
+            this.button2_zip.TabIndex = 26;
+            this.button2_zip.Text = "Создать архив";
+            this.button2_zip.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -856,6 +908,10 @@
         private System.Windows.Forms.TextBox path1_TextBox;
         private System.Windows.Forms.Button button1_refresh;
         private System.Windows.Forms.Button button2_refresh;
+        private System.Windows.Forms.Button button1_unzip;
+        private System.Windows.Forms.Button button1_zip;
+        private System.Windows.Forms.Button button2_unzip;
+        private System.Windows.Forms.Button button2_zip;
     }
 }
 

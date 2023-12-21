@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,6 +40,8 @@ namespace FileManager
         public Button CopyButton;
         public Button CreateButton;
         public Button RefreshButton;
+        public Button ZipButton;
+        public Button UnzipButton;
         public ListView FilesView;
         public StatusStrip StatusBar;
         public ToolStripStatusLabel StatusName;
@@ -84,6 +87,8 @@ namespace FileManager
             Button copyButton,
             Button createButton,
             Button refreshButton,
+            Button zipButton,
+            Button unzipButton,
             ListView listView,
             StatusStrip statusStrip
             )
@@ -103,6 +108,8 @@ namespace FileManager
             this.CopyButton = copyButton;
             this.CreateButton = createButton;
             this.RefreshButton = refreshButton;
+            this.ZipButton = zipButton;
+            this.UnzipButton = unzipButton;
             this.FilesView = listView;
             this.StatusBar = statusStrip;
             this.tableLayoutSettings = (TableLayoutSettings)statusStrip.LayoutSettings;
@@ -137,6 +144,8 @@ namespace FileManager
             this.MoveButton.Click += new EventHandler(MoveButton_ClickHandler);
             this.CopyButton.Click += new EventHandler(CopyButton_ClickHandler);
             this.RefreshButton.Click += new EventHandler(RefreshButton_ClickHandler);
+            this.ZipButton.Click += new EventHandler(ZipButton_ClickHandler);
+            this.UnzipButton.Click += new EventHandler(UnzipButton_ClickHandler);
 
             this.DateFrom.ValueChanged += new EventHandler(DateFrom_ChangedHandler);
             this.DateTo.ValueChanged += new EventHandler(DateTo_ChangedHandler);
@@ -216,6 +225,8 @@ namespace FileManager
                 DeleteButton.Enabled = false;
                 CopyButton.Enabled = false;
                 MoveButton.Enabled = false;
+                ZipButton.Enabled = false;
+                UnzipButton.Enabled = false;
             }
         }
 
@@ -450,6 +461,47 @@ namespace FileManager
             mainForm.Enabled = true;
         }
 
+        private void copySelectedFiles(string path = "", bool shouldRerender = true)
+        {
+            string destinationPath = path;
+            if (path == "") destinationPath = AnotherController.currentPath;
+
+            foreach (var selectedItem in FilesView.SelectedItems)
+            {
+                ListViewItemWithData item = (ListViewItemWithData)selectedItem;
+
+                if (item.Type == ListItemType.Folder)
+                {
+                    DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
+
+                    Directory.CreateDirectory(destinationPath + @"\" + directoryInfo.Name);
+
+                    // Создать идентичную структуру папок
+                    foreach (string dirPath in Directory.GetDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories))
+                    {
+                        Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, destinationPath + @"\" + directoryInfo.Name));
+                    }
+
+                    // Копировать все файлы и перезаписать файлы с идентичным именем
+                    foreach (string newPath in Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
+                    {
+                        File.Copy(newPath, newPath.Replace(directoryInfo.FullName, destinationPath + @"\" + directoryInfo.Name), true);
+                    }
+
+                    if (shouldRerender) FullRerender();
+                }
+
+                if (item.Type == ListItemType.File)
+                {
+                    FileInfo fileInfo = (FileInfo)item.GetData();
+
+                    File.Copy(fileInfo.FullName, destinationPath + @"\" + fileInfo.Name);
+                    if (shouldRerender) FullRerender();
+                }
+
+            }
+        }
+
         /* Обработчик смены выбранного файла в списке файлов */
         private void FilesView_SelectionChangeHandler(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -485,6 +537,16 @@ namespace FileManager
                 return;
             }
             DeleteButton.Enabled = true;
+            ZipButton.Enabled = true;
+            if (item.Text.EndsWith(".zip"))
+            {
+                UnzipButton.Enabled = true;
+            }
+            else
+            {
+                UnzipButton.Enabled = false;
+
+            }
 
             /* Если выбран ровно один файл/папка, отобразить информацию о нём в нижней строке */
             if (FilesView.SelectedItems.Count == 1)
@@ -841,44 +903,7 @@ namespace FileManager
 
                 if (answer == DialogResult.Yes)
                 {
-
-                    foreach (var selectedItem in FilesView.SelectedItems)
-                    {
-
-
-                        ListViewItemWithData item = (ListViewItemWithData)selectedItem;
-
-                        if (item.Type == ListItemType.Folder)
-                        {
-                            DirectoryInfo directoryInfo = (DirectoryInfo)item.GetData();
-
-                            Directory.CreateDirectory(AnotherController.currentPath + @"\" + directoryInfo.Name);
-
-                            // Создать идентичную структуру папок
-                            foreach (string dirPath in Directory.GetDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories))
-                            {
-                                Directory.CreateDirectory(dirPath.Replace(directoryInfo.FullName, AnotherController.currentPath + @"\" + directoryInfo.Name));
-                            }
-
-                            // Копировать все файлы и перезаписать файлы с идентичным именем
-                            foreach (string newPath in Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
-                            {
-                                File.Copy(newPath, newPath.Replace(directoryInfo.FullName, AnotherController.currentPath + @"\" + directoryInfo.Name), true);
-                            }
-
-                            FullRerender();
-
-                        }
-
-                        if (item.Type == ListItemType.File)
-                        {
-                            FileInfo fileInfo = (FileInfo)item.GetData();
-
-                            File.Copy(fileInfo.FullName, AnotherController.currentPath + @"\" + fileInfo.Name);
-                            FullRerender();
-                        }
-
-                    }
+                    copySelectedFiles();
                 }
             }
             catch (Exception error)
@@ -893,6 +918,57 @@ namespace FileManager
             if (!isSearchMode)
             {
                 OpenFolder(currentPath);
+            }
+        }
+
+        /* Обработчик нажатия на кнопку архивации */
+        private void ZipButton_ClickHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                string guid = Guid.NewGuid().ToString();
+                string pathToArchive = currentPath + @"\zip-" + guid;
+
+                if (Directory.Exists(pathToArchive))
+                {
+                    Directory.Delete(pathToArchive, true); 
+                }
+
+                Directory.CreateDirectory(pathToArchive);
+                copySelectedFiles(pathToArchive, false);
+
+                ZipFile.CreateFromDirectory(pathToArchive, pathToArchive + ".zip");
+                Directory.Delete(pathToArchive, true);
+
+                FullRerender();
+            }
+            catch (Exception error) {
+                MessageBox.Show(error.Message, "Ошибка архивации", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /* Обработчик нажатия на кнопку разархивирования */
+        private void UnzipButton_ClickHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                ListViewItemWithData item = (ListViewItemWithData)FilesView.SelectedItems[0];
+                FileInfo info = (FileInfo)item.GetData();
+                string pathToArchive = info.FullName.Remove(info.FullName.Length - 4);
+
+                if (Directory.Exists(pathToArchive))
+                {
+                    Directory.Delete(pathToArchive, true);
+                }
+
+                Directory.CreateDirectory(pathToArchive);
+                ZipFile.ExtractToDirectory(info.FullName, pathToArchive);
+
+                FullRerender();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Ошибка архивации", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

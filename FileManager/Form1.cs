@@ -41,6 +41,8 @@ namespace FileManager
                 button1_copyToRight,
                 button1_create,
                 button1_refresh,
+                button1_zip,
+                button1_unzip,
                 listView1,
                 statusStrip1
                 );
@@ -62,6 +64,8 @@ namespace FileManager
                 button2_copyToLeft,
                 button2_create,
                 button2_refresh,
+                button2_zip,
+                button2_unzip,
                 listView2,
                 statusStrip2
                 );

@@ -39,9 +39,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 65);
+            this.textBox1.Location = new System.Drawing.Point(53, 41);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(315, 20);
+            this.textBox1.Size = new System.Drawing.Size(274, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -58,7 +58,7 @@
             // 
             this.radioButton_file.AutoSize = true;
             this.radioButton_file.Checked = true;
-            this.radioButton_file.Location = new System.Drawing.Point(210, 42);
+            this.radioButton_file.Location = new System.Drawing.Point(21, 79);
             this.radioButton_file.Name = "radioButton_file";
             this.radioButton_file.Size = new System.Drawing.Size(54, 17);
             this.radioButton_file.TabIndex = 1;
@@ -69,7 +69,7 @@
             // radioButton_folder
             // 
             this.radioButton_folder.AutoSize = true;
-            this.radioButton_folder.Location = new System.Drawing.Point(270, 42);
+            this.radioButton_folder.Location = new System.Drawing.Point(81, 79);
             this.radioButton_folder.Name = "radioButton_folder";
             this.radioButton_folder.Size = new System.Drawing.Size(57, 17);
             this.radioButton_folder.TabIndex = 2;
@@ -79,7 +79,7 @@
             // button_cancel
             // 
             this.button_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button_cancel.Location = new System.Drawing.Point(12, 108);
+            this.button_cancel.Location = new System.Drawing.Point(170, 108);
             this.button_cancel.Name = "button_cancel";
             this.button_cancel.Size = new System.Drawing.Size(75, 23);
             this.button_cancel.TabIndex = 3;
@@ -100,7 +100,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 46);
+            this.label2.Location = new System.Drawing.Point(18, 44);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 6;
@@ -112,11 +112,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button_cancel;
             this.ClientSize = new System.Drawing.Size(339, 143);
+            this.Controls.Add(this.radioButton_file);
+            this.Controls.Add(this.radioButton_folder);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button_create);
             this.Controls.Add(this.button_cancel);
-            this.Controls.Add(this.radioButton_folder);
-            this.Controls.Add(this.radioButton_file);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
